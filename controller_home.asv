@@ -49,7 +49,7 @@ function v_c=controller_home_(uu,P)
 %     v2 = skill_follow_ball_on_line(robot(:,2), ball, -2*P.field_width/3, P);
 
     % robot #2 stays at the goal, defending it
-    v2 = skill_defend_goal(robot(:,2), -2*P.field_width/3, P);
+    v2 = skill_defend_goal(robot(:,2), P);
     
     % output velocity commands to robots
     v1 = utility_saturate_velocity(v1,P);
@@ -106,10 +106,10 @@ end
 %   rushes back to the goal to defend against incoming attacks.
 %   angle always faces the ball.
 
-function v=skill_defend_goal(robot, x_pos, P)
+function v=skill_defend_goal(robot, P)
     
     % get back to the home goal
-    v = skill_go_to_point(robot, x_pos, P);
+    skill_go_to_point(robot, -4.f, P);
     
     % control x position to stay on current line
     vx = -P.control_k_vx*(robot(1)-x_pos);
