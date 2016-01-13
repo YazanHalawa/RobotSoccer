@@ -116,26 +116,15 @@ function v=skill_defend_goal(robot, ball, P)
     theta_d = atan2(ball(2)-robot(2), ball(1)-robot(1));
     omega = -P.control_k_phi*(robot(3) - theta_d); 
     
-     % get back to the home goal
+    % match the y position of the ball
+    if (ball(2) - P.goal_width
+    
+    
+    % get back to the home goal
     v = skill_go_to_point(robot, point, P);
     
-    % match the y position of the ball
-    v(2) = -P.control_k_vy*(robot(2)-ball(2));
-    
-    % restrict movement to the goal edges
-    if (ball(2) > P.goal_width/2)
-        point(1,2) = P.goal_width/2;
-        v = skill_go_to_point(robot, point, P);
-    end
-    if (ball(2) < -P.goal_width/2)
-        point(1,2) = -P.goal_width/2;
-        v = skill_go_to_point(robot, point, P);
-    end
-        
-    % assign angle
     v(3) = omega;
 end
-
 %-----------------------------------------
 % skill - go to point
 %   follows the y-position of the ball, while maintaining x-position at
