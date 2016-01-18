@@ -74,9 +74,9 @@ function v = play_rush_goal(robot, ball, P)
   position = ball - 0.2*n;
     
   if norm(position-robot(1:2))<.21,
-      v = skill_go_to_point(robot, P.goal, P);
+      v = skill_go_to_point_and_shoot(robot, P.goal, ball, P);
   else
-      v = skill_go_to_point(robot, position, P);
+      v = skill_go_to_point_and_shoot(robot, position, ball,P);
   end
 
 end
@@ -101,6 +101,9 @@ function v=skill_follow_ball_on_line(robot, ball, x_pos, P)
     v = [vx; vy; omega];
 end
 
+%/////////////////////////////////////////
+%            NEW CODE
+%/////////////////////////////////////////
 %-----------------------------------------
 % skill - defend goal
 %   rushes back to the goal to defend against incoming attacks.
@@ -136,6 +139,28 @@ function v=skill_defend_goal(robot, ball, P)
     v(3) = omega;
 end
 
+%-----------------------------------------
+% skill - go to point and shoot
+%   follows the y-position of the ball, while mainting x-position at 
+%   x_pos. Angle always faces a direction to reflect the ball to the goal
+
+function v=skill_go_to_point_and_shoot(robot, point, ball, P)
+
+    % control x position to stay on current line
+    vx = -P.control_k_vx*(robot(1)-point(1));
+    
+    % control y position to match the ball's y-position
+    vy = -P.control_k_vy*(robot(2)-point(2));
+    
+    % control angle to -pi/2
+    theta_d1 = atan2(P.goal(2)-robot(2), P.goal(1)-robot(1));
+    theta_d2 = atan2(ball(2)-robot(2), ball(1)-robot(1));
+    theta_d = (theta_d1 + theta_d2)/2;
+    omega = -P.control_k_phi*(robot(3) - theta_d);
+    
+    v = [vx; vy; omega];
+end
+%/////////////////////////////////////////
 %-----------------------------------------
 % skill - go to point
 %   follows the y-position of the ball, while maintaining x-position at
