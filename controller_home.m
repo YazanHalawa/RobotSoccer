@@ -43,13 +43,10 @@ function v_c=controller_home_(uu,P)
     t      = uu(1+NN);
 
     % robot #1 positions itself behind ball and rushes the goal.
-    v1 = play_rush_goal(robot(:,1), ball, P);
- 
-    % robot #2 stays on line, following the ball, facing the goal
-%     v2 = skill_follow_ball_on_line(robot(:,2), ball, -2*P.field_width/3, P);
-
+    %v1 = play_rush_goal(robot(:,1), ball, P);
+    v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
     % robot #2 stays at the goal, defending it
-    v2 = skill_defend_goal(robot(:,2), ball, P);
+    v2 = skill_defend_goal(robot(:, 2), ball, opponent(:, 1), P);
     
     % output velocity commands to robots
     v1 = utility_saturate_velocity(v1,P);
@@ -70,13 +67,14 @@ function v = play_rush_goal(robot, ball, P)
   % normal vector from ball to goal
   n = P.goal-ball;
   n = n/norm(n);
+    
   % compute position 10cm behind ball, but aligned with goal.
   position = ball - 0.2*n;
-    
+  
   if norm(position-robot(1:2))<.21,
-      v = skill_go_to_point_and_shoot(robot, P.goal, ball, P);
+      v = skill_go_to_point(robot, P.goal, P);
   else
-      v = skill_go_to_point_and_shoot(robot, position, ball,P);
+      v = skill_go_to_point(robot, position,P);
   end
 
 end
@@ -109,14 +107,56 @@ end
 %   rushes back to the goal to defend against incoming attacks.
 %   angle always faces the ball.
 
-function v=skill_defend_goal(robot, ball, P)
+function difference=getBallVec(ball)
+    %figure out where the ball is heading
+    persistent oldBallPos;
+    persistent currBallPos;
+    persistent count;
+    if isempty(count)
+      count = 0 ;
+      oldBallPos = zeros(1,2);
+      currBallPos = zeros(1,2);
+    end
+    if (count > 30)
+    oldBallPos = currBallPos;
+    currBallPos = ball;
+    %disp(['old is: ' num2str(oldBallPos(1))]);
+    %disp(['curr is: ' num2str(currBallPos(1))]);
+    count = 0;
+    end
+    count = count + 1;
+    difference = currBallPos(1) - oldBallPos(1);
+end
+
+function v=skill_block_opponent_goalie(robot, opponent, P)
+    v = skill_go_to_point(robot, opponent, P);
+end
+
+function v=skill_offensive_Goalie(robot, ball, opponent, P)
+    direction = getBallVec(ball); % Get the direction of the ball   
+    if (ball(1) < 0) % ball is on our side, defend goal
+        v = skill_defend_goal(robot, ball, opponent, P);
+    elseif (direction < 0) % if ball is heading towards us
+        % have the attacked robot block the goalie and hit the ball
+        v = play_rush_goal(robot, ball, P);
+    else
+        v = skill_follow_ball_on_line(robot, ball, -P.field_width/4, P);
+    end
+end
+
+function v=skill_normal_Goalie(robot, ball, P)
     % Create a point using the coordinates of the home goal
     point = zeros(1,2);
     point(1,1) = -P.field_width;
     point(1,2) = 0;
     
-    % control angle to -pi/2
+     % control angle to -pi/2
     theta_d = atan2(ball(2)-robot(2), ball(1)-robot(1));
+    if (theta_d < -pi/2)
+        theta_d = -pi/2;
+    elseif (theta_d > pi/2)
+        theta_d = pi/2;
+    end
     omega = -P.control_k_phi*(robot(3) - theta_d); 
     
      % get back to the home goal
@@ -137,6 +177,17 @@ function v=skill_defend_goal(robot, ball, P)
         
     % assign angle
     v(3) = omega;
+end
+
+function v=skill_defend_goal(robot, ball, opponent, P)
+
+    direction = getBallVec(ball); % Get the direction of the ball
+    % If ball is on the right half of the field and going towards them
+    if (ball(1) > 0) 
+        v=skill_offensive_Goalie(robot, ball, opponent, P);
+    else
+        v=skill_normal_Goalie(robot, ball, P);
+    end
 end
 
 %-----------------------------------------
