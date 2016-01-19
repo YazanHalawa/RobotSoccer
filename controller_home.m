@@ -43,8 +43,10 @@ function v_c=controller_home_(uu,P)
     t      = uu(1+NN);
 
     % robot #1 positions itself behind ball and rushes the goal.
-    %v1 = play_rush_goal(robot(:,1), ball, P);
-    v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
+    v1 = play_rush_goal(robot(:,1), ball, P);
+    if (ball(1) > 0) % if ball is on the right side of the field
+        v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
+    end
     % robot #2 stays at the goal, defending it
     v2 = skill_defend_goal(robot(:, 2), ball, opponent(:, 1), P);
     
@@ -148,12 +150,27 @@ function v=skill_offensive_Goalie(robot, ball, opponent, P)
         v = skill_defend_goal(robot, ball, opponent, P);
     elseif (direction < 0) % if ball is heading towards us
         % have the attacked robot block the goalie and hit the ball
-        v = play_rush_goal(robot, ball, P);
+        v = play_rush_goal_corner_attack(robot, ball, P);
     else
         v = skill_follow_ball_on_line(robot, ball, -P.field_width/4, P);
     end
 end
 
+function v=play_rush_goal_corner_attack(robot, ball, P)
+    % normal vector from ball to goal
+    n = P.goal-ball;
+    n = n/norm(n);
+
+    % compute position 10cm behind ball, but aligned with goal.
+    positionBall = ball - 0.2*n;
+    positionGoal = [4*P.goal(1)/6, P.goal(2)];
+
+    if norm(positionBall-robot(1:2))<.21,
+      v = skill_go_to_point(robot, positionGoal, P);
+    else
+      v = skill_go_to_point(robot, positionBall,P);
+    end
+end
 %-----------------------------------------
 % skill - normal goalie
 %   has the defense robot rush back to the goal to defend it by matching
@@ -167,10 +184,10 @@ function v=skill_normal_Goalie(robot, ball, P)
     
      % control angle to -pi/2
     theta_d = atan2(ball(2)-robot(2), ball(1)-robot(1));
-    if (theta_d < -pi/2)
-        theta_d = -pi/2;
-    elseif (theta_d > pi/2)
-        theta_d = pi/2;
+    if (theta_d < (-0.9*pi/2))
+        theta_d = -0.9*pi/2;
+    elseif (theta_d > 0.9*pi/2)
+        theta_d = 0.9*pi/2;
     end
     omega = -P.control_k_phi*(robot(3) - theta_d); 
     
