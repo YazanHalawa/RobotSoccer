@@ -48,7 +48,7 @@ function v_c=controller_home_(uu,P)
         v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
     end
     % robot #2 stays at the goal, defending it
-    v2 = skill_defend_goal(robot(:, 2), ball, opponent(:, 1), P);
+    v2 = skill_defend_goal(robot, ball, opponent(:, 1), P);
     
     % output velocity commands to robots
     v1 = utility_saturate_velocity(v1,P);
@@ -152,7 +152,7 @@ function v=skill_offensive_Goalie(robot, ball, opponent, P)
         % have the attacked robot block the goalie and hit the ball
         v = play_rush_goal_corner_attack(robot, ball, P);
     else
-        v = skill_follow_ball_on_line(robot, ball, -P.field_width/4, P);
+        v = skill_follow_ball_on_line(robot(:, 2), ball, -P.field_width/4, P);
     end
 end
 
@@ -163,12 +163,19 @@ function v=play_rush_goal_corner_attack(robot, ball, P)
 
     % compute position 10cm behind ball, but aligned with goal.
     positionBall = ball - 0.2*n;
-    positionGoal = [4*P.goal(1)/6, P.goal(2)];
-
-    if norm(positionBall-robot(1:2))<.21,
-      v = skill_go_to_point(robot, positionGoal, P);
+    % check if robot is blocking at the top corner of goal, shoot for the
+    % bottom corner, else, shoot for the top corner
+    positionGoal = [0,0];
+    if (robot(2, 1) > P.goal(1)) % Robot is at bottom corner
+        positionGoal = [1.1*P.goal(1), P.goal(2)];
     else
-      v = skill_go_to_point(robot, positionBall,P);
+        positionGoal = [0.9*P.goal(1), P.goal(2)];
+    end
+
+    if norm(positionBall-robot(1:2, 2))<.21,
+      v = skill_go_to_point(robot(:, 2), positionGoal, P);
+    else
+      v = skill_go_to_point(robot(:, 2), positionBall,P);
     end
 end
 %-----------------------------------------
@@ -222,7 +229,7 @@ function v=skill_defend_goal(robot, ball, opponent, P)
     if (ball(1) > 0) 
         v=skill_offensive_Goalie(robot, ball, opponent, P);
     else
-        v=skill_normal_Goalie(robot, ball, P);
+        v=skill_normal_Goalie(robot(:, 2), ball, P);
     end
 end
 
