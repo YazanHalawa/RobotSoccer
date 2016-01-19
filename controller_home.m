@@ -102,10 +102,11 @@ end
 %/////////////////////////////////////////
 %            NEW CODE
 %/////////////////////////////////////////
+
 %-----------------------------------------
-% skill - defend goal
-%   rushes back to the goal to defend against incoming attacks.
-%   angle always faces the ball.
+% Helper function - Get Ball Direction
+%   gets the direction that the ball is moving in by returning the
+%   difference between its old and new position every third of a second.
 
 function difference=getBallVec(ball)
     %figure out where the ball is heading
@@ -128,10 +129,19 @@ function difference=getBallVec(ball)
     difference = currBallPos(1) - oldBallPos(1);
 end
 
+%-----------------------------------------
+% skill - Block oppoenent goalie
+%   has the attacker robot rush to the opponent goalie and block him so
+%   the goal would be wide open for the offensive goalie to take the shot.
+
 function v=skill_block_opponent_goalie(robot, opponent, P)
     v = skill_go_to_point(robot, opponent, P);
 end
 
+%-----------------------------------------
+% skill - offensive goalie
+%   has the defender robot hit the ball if the ball is on the opponent's
+%   field, else the robot stays on a designated defense line.
 function v=skill_offensive_Goalie(robot, ball, opponent, P)
     direction = getBallVec(ball); % Get the direction of the ball   
     if (ball(1) < 0) % ball is on our side, defend goal
@@ -144,6 +154,11 @@ function v=skill_offensive_Goalie(robot, ball, opponent, P)
     end
 end
 
+%-----------------------------------------
+% skill - normal goalie
+%   has the defense robot rush back to the goal to defend it by matching
+%   the y-position of the ball (limited to the goal's edges) and matching
+%   the angle to the direction the ball is coming from
 function v=skill_normal_Goalie(robot, ball, P)
     % Create a point using the coordinates of the home goal
     point = zeros(1,2);
@@ -179,6 +194,10 @@ function v=skill_normal_Goalie(robot, ball, P)
     v(3) = omega;
 end
 
+%-----------------------------------------
+% skill - defend goal
+%   alternates between normal goalie and defensive goalie depending on the
+%   position of the ball in the field.
 function v=skill_defend_goal(robot, ball, opponent, P)
 
     direction = getBallVec(ball); % Get the direction of the ball
@@ -190,33 +209,11 @@ function v=skill_defend_goal(robot, ball, opponent, P)
     end
 end
 
-%-----------------------------------------
-% skill - go to point and shoot
-%   follows the y-position of the ball, while mainting x-position at 
-%   x_pos. Angle always faces a direction to reflect the ball to the goal
-
-function v=skill_go_to_point_and_shoot(robot, point, ball, P)
-
-    % control x position to stay on current line
-    vx = -P.control_k_vx*(robot(1)-point(1));
-    
-    % control y position to match the ball's y-position
-    vy = -P.control_k_vy*(robot(2)-point(2));
-    
-    % control angle to -pi/2
-    theta_d1 = atan2(P.goal(2)-robot(2), P.goal(1)-robot(1));
-    theta_d2 = atan2(ball(2)-robot(2), ball(1)-robot(1));
-    theta_d = (theta_d1 + theta_d2)/2;
-    omega = -P.control_k_phi*(robot(3) - theta_d);
-    
-    v = [vx; vy; omega];
-end
 %/////////////////////////////////////////
 %-----------------------------------------
 % skill - go to point
 %   follows the y-position of the ball, while maintaining x-position at
 %   x_pos.  Angle always faces the goal.
-
 function v=skill_go_to_point(robot, point, P)
 
     % control x position to stay on current line

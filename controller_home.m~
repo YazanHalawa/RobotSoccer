@@ -43,13 +43,10 @@ function v_c=controller_home_(uu,P)
     t      = uu(1+NN);
 
     % robot #1 positions itself behind ball and rushes the goal.
-    v1 = play_rush_goal(robot(:,1), ball, P);
- 
-    % robot #2 stays on line, following the ball, facing the goal
-%     v2 = skill_follow_ball_on_line(robot(:,2), ball, -2*P.field_width/3, P);
-
+    %v1 = play_rush_goal(robot(:,1), ball, P);
+    v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
     % robot #2 stays at the goal, defending it
-    v2 = skill_defend_goal(robot(:,2), ball, opponent(:,1), P);
+    v2 = skill_defend_goal(robot(:, 2), ball, opponent(:, 1), P);
     
     % output velocity commands to robots
     v1 = utility_saturate_velocity(v1,P);
@@ -105,10 +102,11 @@ end
 %/////////////////////////////////////////
 %            NEW CODE
 %/////////////////////////////////////////
+
 %-----------------------------------------
-% skill - defend goal
-%   rushes back to the goal to defend against incoming attacks.
-%   angle always faces the ball.
+% Helper function - Get Ball Direction
+%   gets the direction that the ball is moving in by returning the
+%   difference between its old and new position every third of a second
 
 function difference=getBallVec(ball)
     %figure out where the ball is heading
@@ -123,22 +121,33 @@ function difference=getBallVec(ball)
     if (count > 30)
     oldBallPos = currBallPos;
     currBallPos = ball;
-    disp(['old is: ' num2str(oldBallPos(1))]);
-    disp(['curr is: ' num2str(currBallPos(1))]);
+    %disp(['old is: ' num2str(oldBallPos(1))]);
+    %disp(['curr is: ' num2str(currBallPos(1))]);
     count = 0;
     end
     count = count + 1;
     difference = currBallPos(1) - oldBallPos(1);
 end
 
+%-----------------------------------------
+% skill - Block oppoenent goalie
+%   has the attacker robot rush to the opponent goalie and block him so
+%   the goal would be wide open for the offensive goalie to take the shot
+
+function v=skill_block_opponent_goalie(robot, opponent, P)
+    v = skill_go_to_point(robot, opponent, P);
+end
+
+%-----------------------------------------
+% skill - offensive goalie
+%   has the defender robot hit the ball if the ball is on
 function v=skill_offensive_Goalie(robot, ball, opponent, P)
     direction = getBallVec(ball); % Get the direction of the ball   
     if (ball(1) < 0) % ball is on our side, defend goal
         v = skill_defend_goal(robot, ball, opponent, P);
-    end
-    if (direction < 0) % if ball is heading towards us
-        % if we are closer to the ball than the enemy, hit the ball
-        v = skill_go_to_point(robot, ball, P);
+    elseif (direction < 0) % if ball is heading towards us
+        % have the attacked robot block the goalie and hit the ball
+        v = play_rush_goal(robot, ball, P);
     else
         v = skill_follow_ball_on_line(robot, ball, -P.field_width/4, P);
     end
@@ -180,9 +189,10 @@ function v=skill_normal_Goalie(robot, ball, P)
 end
 
 function v=skill_defend_goal(robot, ball, opponent, P)
+
     direction = getBallVec(ball); % Get the direction of the ball
     % If ball is on the right half of the field and going towards them
-    if (ball(1) > 0 && direction > 0) 
+    if (ball(1) > 0) 
         v=skill_offensive_Goalie(robot, ball, opponent, P);
     else
         v=skill_normal_Goalie(robot, ball, P);
