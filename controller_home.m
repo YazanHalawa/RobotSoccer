@@ -44,7 +44,7 @@ function v_c=controller_home_(uu,P)
 
     % robot #1 positions itself behind ball and rushes the goal.
     v1 = play_rush_goal(robot(:,1), ball, P);
-    if (ball(1) > 0) % if ball is on the right side of the field
+    if (ball(1) > P.field_width/3) % if ball is on the right side of the field
         v1 = skill_block_opponent_goalie(robot(:, 1), opponent(:, 2), P);
     end
     % robot #2 stays at the goal, defending it
@@ -156,6 +156,15 @@ function v=skill_offensive_Goalie(robot, ball, opponent, P)
     end
 end
 
+%-----------------------------------------
+% play - rush goal corner attack
+%   - go to position behind ball
+%   - if ball is between robot and goal, go to goal and target the open
+%   corner when our other robot is blocking his goalie
+% NOTE:  This is a play because it is built on skills, and not control
+% commands.  Skills are built on control commands.  A strategy would employ
+% plays at a lower level.  For example, switching between offense and
+% defense would be a strategy.
 function v=play_rush_goal_corner_attack(robot, ball, P)
     % normal vector from ball to goal
     n = P.goal-ball;
@@ -166,10 +175,10 @@ function v=play_rush_goal_corner_attack(robot, ball, P)
     % check if robot is blocking at the top corner of goal, shoot for the
     % bottom corner, else, shoot for the top corner
     positionGoal = [0,0];
-    if (robot(2, 1) > P.goal(1)) % Robot is at bottom corner
-        positionGoal = [1.1*P.goal(1), P.goal(2)];
+    if (robot(2, 1) > 0) % Robot is at bottom corner
+        positionGoal = [P.goal(1), P.goal(2) - 0.5];
     else
-        positionGoal = [0.9*P.goal(1), P.goal(2)];
+        positionGoal = [0.7*P.goal(1), P.goal(2) + 0.5];
     end
 
     if norm(positionBall-robot(1:2, 2))<.21,
