@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ecestudent/catkin_ws/src/Vision/RedDetectingDemo.cpp
+iostream
+-
+opencv2/highgui/highgui.hpp
+/home/ecestudent/catkin_ws/src/Vision/opencv2/highgui/highgui.hpp
+opencv2/imgproc/imgproc.hpp
+/home/ecestudent/catkin_ws/src/Vision/opencv2/imgproc/imgproc.hpp
+

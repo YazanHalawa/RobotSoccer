@@ -1,0 +1,8 @@
+prefix=/home/ecestudent/catkin_ws/devel
+
+Name: artifIntell
+Description: Description of artifIntell
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ecestudent/catkin_ws/devel/lib 
+Requires: 

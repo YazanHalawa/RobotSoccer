@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "artifIntell")
+set(artifIntell_MAINTAINER "ecestudent <ecestudent@todo.todo>")
+set(artifIntell_DEPRECATED "")
+set(artifIntell_VERSION "0.0.0")
+set(artifIntell_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(artifIntell_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(artifIntell_BUILDTOOL_DEPENDS "catkin")

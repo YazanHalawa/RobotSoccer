@@ -1,0 +1,8 @@
+prefix=/home/ecestudent/catkin_ws/src/build-vision-Desktop-Default/devel
+
+Name: vision
+Description: Description of vision
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ecestudent/catkin_ws/src/build-vision-Desktop-Default/devel/lib 
+Requires: 

@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "motionControl")
+set(motionControl_MAINTAINER "odroid <odroid@todo.todo>")
+set(motionControl_DEPRECATED "")
+set(motionControl_VERSION "0.0.0")
+set(motionControl_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(motionControl_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(motionControl_BUILDTOOL_DEPENDS "catkin")

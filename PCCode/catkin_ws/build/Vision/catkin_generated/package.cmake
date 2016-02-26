@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "Vision")
+set(Vision_MAINTAINER "ecestudent <ecestudent@todo.todo>")
+set(Vision_DEPRECATED "")
+set(Vision_VERSION "0.0.0")
+set(Vision_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(Vision_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(Vision_BUILDTOOL_DEPENDS "catkin")
