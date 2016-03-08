@@ -6,32 +6,80 @@ import velchange as v
 from roboclaw import *
 import math
 import time
-
-status = 0;
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import numpy as np
 
 class Statics:
 	status = int(0)
 	old_X_Pos = float(0)
 	old_Y_Pos = float(0)
 	oldAnglePos = float(0)
+	timeThroughfunction = 0
+	timing = list()
+	robotPositions = list()
+	#keepGoing = 1
+	#figureCount = 0;
+	#graph = 0;
+
+# def update_line(num, data, line):
+#     line.set_data(data[...,:num])
+#     return line
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
-    defendGoal(data.data)
-    rushBall(data.data)
+	rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+	# if (Statics.keepGoing == 1):
+	#defendGoal(data.data)
+	#else:
+	#Statics.figureCount = Statics.figureCount + 1;
+	#plt.figure()
+	#plt.plot(Statics.timing, Statics.robotPositions)
+
+	#plt.savefig("test" + str(Statics.figureCount) + ".png")
+	#plt.show()
+	#plt.hide()
+	#Statics.robotPositions = list()
+	#Statics.timing = list()
+	#Statics.timeThroughfunction = 0
+	#Statics.keepGoing = 1
+	#plt.clf()
+	rushBall(data.data)
 
 def defendGoal(data):
 	#break off the information
 	myList = data.split("\n")
 	robotInfo = myList[0].split(",")
+	#Statics.robotPositions.append(robotInfo);
+	# Statics.timeThroughfunction = Statics.timeThroughfunction + 1;
+	# Statics.timing.append(Statics.timeThroughfunction)
+	# Statics.robotPositions.append(robotInfo[0]);
+
+
+	# #Y = X**2 + np.random.random(X.shape)
+	# Statics.graph.set_ydata(Statics.robotPositions)
+	# Statics.graph.set_xdata(Statics.timing)
+	# plt.draw()
+	# plt.pause(.01)
+
 	ballInfo = myList[1].split(",")
-	
+	#if (len(Statics.robotPositions) == 20):
+	#	Statics.keepGoing = 0;
 	#break off to variables
 	robotX = float(robotInfo[0]);
 	robotY = float(robotInfo[1]);
+
 	theta = float(robotInfo[2]);
 	ballX = float(ballInfo[0])
 	ballY = float(ballInfo[1])
+
+	#graph the data
+	#plt.scatter(Statics.timeThroughfunction, robotInfo[0]);
+
+
+	#plt.grid(True)
+	#plt.savefig("test.png")
+	#plt.show()
+	#plt.pause(0.0001)
 
 	commanded_X_pos = 1.66
 	if (ballY > .25):
@@ -169,8 +217,8 @@ def rushBall(data):
 		print "current_Y_pos %f"%current_Y_pos
 		print "vel Y %f"%vel_Y
 		print
-		print "error in angle %f"%error_Ang
-		print "current Angle %f"%current_Ang_pos
+		print "error in angle %f"%(error_Ang*float(180)/float(math.pi))
+		print "current Angle %f"%(current_Ang_pos*float(180)/float(math.pi))
 		print "angle vel %f"%vel_Ang
 
 		print "damped angle %f"%theta_Damped
@@ -188,13 +236,21 @@ def rushBall(data):
 
 def listener():
 
-    rospy.init_node('listener', anonymous=True)
+	rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber('vision', String, callback)
-    if (status == 1):
-    	return
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+	# plt.xlabel('time (s)')
+	# plt.ylabel('positions (m)')
+	# plt.title('confusion')
+	# plt.grid(True)
+	# X = np.linspace(0,2,1000)
+	# Y = X**2 + np.random.random(X.shape)
+
+	# plt.ion()
+	# Statics.graph = plt.plot(X,Y)[0]
+
+	rospy.Subscriber('Vision', String, callback)
+	# spin() simply keeps python from exiting until this node is stopped
+	rospy.spin()
 
 if __name__ == '__main__':
 	SetM2pidq(128,65536,32768,16384,243759)
