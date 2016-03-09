@@ -620,7 +620,7 @@ def calibrateRoboclaws():
     speedM3 = scale(qqps_m3)
     
     SetM1pidq(128,p,i,d,speedM1)
-    SetM2pidq(128,p,i,d,speedM2)
+    SetM2pidq(129,p,i,d,speedM2)
     SetM1pidq(129,p,i,d,speedM3)
 
 #print "Roboclaw Example 1\r\n"

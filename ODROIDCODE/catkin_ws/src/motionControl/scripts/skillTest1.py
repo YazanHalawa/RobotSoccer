@@ -29,7 +29,7 @@ class Statics:
 def callback(data):
 	rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
 	# if (Statics.keepGoing == 1):
-	#defendGoal(data.data)
+	defendGoal(data.data)
 	#else:
 	#Statics.figureCount = Statics.figureCount + 1;
 	#plt.figure()
@@ -43,7 +43,7 @@ def callback(data):
 	#Statics.timeThroughfunction = 0
 	#Statics.keepGoing = 1
 	#plt.clf()
-	rushBall(data.data)
+	#rushBall(data.data)
 
 def defendGoal(data):
 	#break off the information
@@ -65,10 +65,10 @@ def defendGoal(data):
 	#if (len(Statics.robotPositions) == 20):
 	#	Statics.keepGoing = 0;
 	#break off to variables
-	robotX = float(robotInfo[0]);
-	robotY = float(robotInfo[1]);
+	robotX = float(robotInfo[0])
+	robotY = float(robotInfo[1])
 
-	theta = float(robotInfo[2]);
+	theta = float(robotInfo[2])
 	ballX = float(ballInfo[0])
 	ballY = float(ballInfo[1])
 
@@ -253,9 +253,15 @@ def listener():
 	rospy.spin()
 
 if __name__ == '__main__':
-	SetM2pidq(128,65536,32768,16384,243759)
-	SetM2pidq(129,65536,32768,16384,264568)
-	SetM1pidq(129,65536,32768,16384,256704)
+	# SetM2pidq(128,65536,32768,16384,243759)
+	# SetM2pidq(129,65536,32768,16384,264568)
+	# SetM1pidq(129,65536,32768,16384,256704)
+	p = int(65536 * 4) #262144
+	i = int(65536 * 2) #131072
+	d = int(65536 * 6)  #65536
+	SetM1pidq(129,p,i,d,158372)
+	SetM2pidq(128,p,i,d,164501)
+	SetM2pidq(129,p,i,d,141356)
 	#v.myCircle()
 	#v.mySquare()
 	listener()
