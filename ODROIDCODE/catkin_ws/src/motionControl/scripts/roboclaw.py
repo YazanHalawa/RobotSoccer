@@ -5,6 +5,14 @@ import struct
 import time
 
 checksum = 0
+oldValLong = 0;
+oldValsLong = 0;
+
+oldValByte = 0;
+oldValsByte = 0;
+
+oldValWord = 0;
+oldValsWord = 0;
 
 def sendcommand(address,command):
 	global checksum
@@ -16,41 +24,76 @@ def sendcommand(address,command):
 
 def readbyte():
 	global checksum
-	val = struct.unpack('>B',port.read(1));
+	global oldValByte
+	readVal = port.read(1);
+	if (len(readVal) != 1):
+		readVal = oldValByte
+	val = struct.unpack('>B',readVal);
 	checksum += val[0]
+	oldValByte = readVal;
 	return val[0];	
+
 def readsbyte():
 	global checksum
-	val = struct.unpack('>b',port.read(1));
+	global oldValsByte
+	readVal = port.read(1)
+	if (len(readVal) != 1):
+		readVal = oldValsByte
+	val = struct.unpack('>b',readVal);
 	checksum += val[0]
+	oldValsByte = readVal
 	return val[0];	
+
 def readword():
 	global checksum
-	val = struct.unpack('>H',port.read(2));
+	global oldValWord
+	readVal = port.read(2)
+	if (len(readVal) != 2):
+		readVal = oldValWord
+	val = struct.unpack('>H',readVal);
 	checksum += (val[0]&0xFF)
 	checksum += (val[0]>>8)&0xFF
+	oldValWord = readVal
 	return val[0];	
+
 def readsword():
 	global checksum
-	val = struct.unpack('>h',port.read(2));
+	global oldValsWord
+	readVal = port.read(2)
+	if (len(readVal) != 2):
+		readVal = oldValsWord
+	val = struct.unpack('>h',readVal);
 	checksum += val[0]
 	checksum += (val[0]>>8)&0xFF
+	oldValsWord = readVal
 	return val[0];	
+
 def readlong():
 	global checksum
-	val = struct.unpack('>L',port.read(4));
+	global oldValLong
+	readVal = port.read(4)
+	if (len(readVal) != 4):
+		readVal = oldValLong
+	val = struct.unpack('>L',readVal);
 	checksum += val[0]
 	checksum += (val[0]>>8)&0xFF
 	checksum += (val[0]>>16)&0xFF
 	checksum += (val[0]>>24)&0xFF
+	oldValLong = readVal
 	return val[0];	
+
 def readslong():
 	global checksum
-	val = struct.unpack('>l',port.read(4));
+	global oldValsLong
+	readVal = port.read(4);
+	if (len(readVal) != 4):
+		readVal = oldValsLong
+	val = struct.unpack('>l',readVal);
 	checksum += val[0]
 	checksum += (val[0]>>8)&0xFF
 	checksum += (val[0]>>16)&0xFF
 	checksum += (val[0]>>24)&0xFF
+	oldValsLong = readVal;
 	return val[0];	
 
 def writebyte(val):

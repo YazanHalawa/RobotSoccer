@@ -16,7 +16,7 @@ class Statics:
 	old_Y_Pos = float(0)
 	oldAnglePos = float(0)
 	state = "rushBall"
-	sideOfField = "Away"
+	sideOfField = "Home"
 	samples = 0;
 
 def callback(data):
@@ -176,13 +176,13 @@ def defendGoal(data):
 
 	if (flag):
 
-		error_Max_X = 2#.5
+		error_Max_X = .5
 		vel_Max_X = 1
 		error_X = XErr
 		kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
 		vel_X = kp_X*error_X
 
-		error_Max_Y = 2#.5
+		error_Max_Y = .5
 		vel_Max_Y = 1
 		error_Y = YErr
 		kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
@@ -221,8 +221,8 @@ def attackEnemy(data):
 	ballInfo = myList[1].split(",")
 	
 	#break off to variables
-	robotX = robotInfo[0];
-	robotY = robotInfo[1];
+	robotX = float(robotInfo[0]);
+	robotY = float(robotInfo[1]);
 	theta = float(robotInfo[2]);
 	ballX = float(ballInfo[0])
 	ballY = float(ballInfo[1])
@@ -239,6 +239,12 @@ def attackEnemy(data):
 	current_X_pos = float(robotX)
 	current_Y_pos = float(robotY)
 	current_Ang_pos = float(theta)
+
+	BotBallDisX = abs(robotX - ballX)
+	BotBallDisY = abs(robotY - ballY)
+	if (BotBallDisX > 0.1 or BotBallDisY > 0.1):
+		Statics.state = "rushBall"
+		print "Entering rush ball"
 
 	XErr = commanded_X_pos - current_X_pos
 	YErr = commanded_Y_pos - current_Y_pos
@@ -344,7 +350,7 @@ def rushBall(data):
 
 	XErr = commanded_X_pos - current_X_pos
 	YErr = commanded_Y_pos - current_Y_pos
-	# AngleErr = commanded_Ang_pos - current_Ang_pos
+	AngleErr = commanded_Ang_pos - current_Ang_pos
 
 	flag = False;
 
@@ -353,27 +359,27 @@ def rushBall(data):
 	
 	if (flag):
 		error_Max_X = 2
-		vel_Max_X = 1
+		vel_Max_X = 1.2
 		error_X = XErr
 		kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
 		vel_X = kp_X*error_X
 
 		error_Max_Y = 2
-		vel_Max_Y = 1
+		vel_Max_Y = 1.2
 		error_Y = YErr
 		kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
 		vel_Y = kp_Y*error_Y
 
-		# vel_Ang = 0
-		# error_Ang = 0
-		# if (abs(AngleErr) > 0.2):
-		# 	error_Max_Ang = 3.14 #in radians
-		# 	vel_Max_Ang = 1
-		# 	error_Ang = AngleErr
-		# 	kp_Ang = float(vel_Max_Ang)/float(error_Max_Ang) # units don't match, but that's okay
-		# 	vel_Ang = kp_Ang*error_Ang
+		vel_Ang = 0
+		error_Ang = 0
+		if (abs(AngleErr) > 0.2):
+			error_Max_Ang = 3.14 #in radians
+			vel_Max_Ang = .6
+			error_Ang = AngleErr
+			kp_Ang = float(vel_Max_Ang)/float(error_Max_Ang) # units don't match, but that's okay
+			vel_Ang = kp_Ang*error_Ang
 
-		# theta_Damped = theta - vel_Ang/4
+		theta_Damped = theta - vel_Ang/4
 		vel_X_Body_Frame = math.cos(theta)*vel_X + math.sin(theta)*vel_Y 
 		vel_Y_Body_Frame = -1*(math.cos(theta)*float(vel_Y) - math.sin(theta)*float(vel_X))
 
@@ -388,10 +394,10 @@ def rushBall(data):
 			print "error in Y %f"%error_Y
 			print "current_Y_pos %f"%current_Y_pos
 			print "vel Y %f"%vel_Y
-			# print
+			print
 			# print "error in angle %f"%(error_Ang*float(180)/float(math.pi))
 			# print "current Angle %f"%(current_Ang_pos*float(180)/float(math.pi))
-			# print "angle vel %f"%vel_Ang
+			print "angle vel %f"%vel_Ang
 
 			# print "damped angle %f"%theta_Damped
 
@@ -401,7 +407,7 @@ def rushBall(data):
 
 		
 
-		v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
+		v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, vel_Ang)
 	else:
 		v.goVel(0,0,0)
 		Statics.state = "attackEnemy"
