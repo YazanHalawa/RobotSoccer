@@ -33,6 +33,7 @@ class Statics:
 	XErr = 0
 	YErr = 0
 	AngleErr = 0
+	commanded_Ang_pos = 0
 
 ######################################################################################################################################
 #################################################### ROS Call Back Function ##########################################################
@@ -87,12 +88,12 @@ def selectState():
 		# Analyze current status of robot
 		deltaX = Statics.enemyGoalCenterX - Statics.ballX
 		deltaY = Statics.enemyGoalCenterY - Statics.ballY
-		commanded_Ang_pos = float(math.atan2(deltaY, deltaX))
-		if (commanded_Ang_pos < 0):
-			commanded_Ang_pos += (math.pi*2)
+		Statics.commanded_Ang_pos = float(math.atan2(deltaY, deltaX))
+		if (Statics.commanded_Ang_pos < 0):
+			Statics.commanded_Ang_pos += (math.pi*2)
 		
 		# Calculate the Error in the angle position from the desired
-		Statics.AngleErr = commanded_Ang_pos - Statics.theta
+		Statics.AngleErr = Statics.commanded_Ang_pos - Statics.theta
 
 		# If Error is small, then the robot is facing the goal, so transition to attack
 		if (abs(Statics.AngleErr) <= 0.5):
@@ -112,6 +113,7 @@ def selectState():
 			if (Statics.debug):
 				print "Entering rush ball"
 
+		commanded_Y_pos = 0
 		if (Statics.sideOfField == "Away"):
 			commanded_X_pos = float(-1.35)
 		else:
@@ -219,11 +221,11 @@ def selectState():
 			print "ballX is %f and robot X is %f"%(Statics.ballX, Statics.robotX)
 
 		# Calculate Error from desired
-		XErr = commanded_X_pos - Statics.robotX
-		YErr = commanded_Y_pos - Statics.robotY
+		Statics.XErr = commanded_X_pos - Statics.robotX
+		Statics.YErr = commanded_Y_pos - Statics.robotY
 
 		# If Error is small, then the robot is right behind the ball, so now correct angle
-		if (abs(Statics.XErr) > 0.1 or abs(Statics.YErr) > 0.1 or not robotBehindBall):
+		if (abs(Statics.XErr) <= 0.1 and abs(Statics.YErr) <= 0.1 and robotBehindBall):
 			v.goVel(0,0,0)
 			Statics.state = "correctAngle"
 			if (Statics.debug):
@@ -260,7 +262,7 @@ def correctAngle():
 
 	# Print Data
 	if (Statics.debug):
-		print "commanded_Ang_pos is %f"%commanded_Ang_pos
+		print "commanded_Ang_pos is %f"%Statics.commanded_Ang_pos
 		print "error in angle %f"%error_Ang
 		print "current Angle %f"%Statics.theta
 		print "angle vel %f"%vel_Ang
@@ -288,7 +290,7 @@ def goToGoal():
 	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
 
 	# Print Data
-	if (Statics.debug == 1 and Statics.samples == maxSamples):
+	if (Statics.debug and Statics.samples == Statics.maxSamples):
 		Statics.samples = 0;
 		print "error in X %f"%error_X
 		print "current_X_pos %f"%Statics.robotX
@@ -325,7 +327,7 @@ def defendGoal():
 	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
 
 	# Print Data
-	if (Statics.debug and Statics.samples == maxSamples):
+	if (Statics.debug and Statics.samples == Statics.maxSamples):
 		Statics.samples = 0;
 		print "error in X %f"%error_X
 		print "current_X_pos %f"%Statics.robotX
@@ -362,7 +364,7 @@ def attackEnemy():
 	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
 
 	# Print Data
-	if (Statics.debug == 1 and Statics.samples == maxSamples):
+	if (Statics.debug == 1 and Statics.samples == Statics.maxSamples):
 		Statics.samples = 0
 		print "error in X %f"%error_X
 		print "current_X_pos %f"%Statics.robotX
@@ -386,21 +388,20 @@ def rushBall():
 	# Code for Proportional Controller
 	error_Max_Y = 2
 	vel_Max_Y = 1
-	error_Y = YErr
+	error_Y = Statics.YErr
 	kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
 	vel_Y = kp_Y*error_Y
 
 	# Account for Angle
-	vel_X_Body_Frame = math.cos(theta)*vel_X + math.sin(theta)*vel_Y 
-	vel_Y_Body_Frame = -1*(math.cos(theta)*float(vel_Y) - math.sin(theta)*float(vel_X))
+	vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
+	vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 
 	# Send Commands to Wheels
 	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
 
 	# Print Data
-	if (debug == 1 and Statics.samples == maxSamples):
+	if (Statics.debug):
 		Statics.samples = 0
-		print data
 		print "error in X %f"%error_X
 		print "current_X_pos %f"%Statics.robotX
 		print "vel X %f"%vel_X
