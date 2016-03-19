@@ -17,6 +17,7 @@ class Statics:
 	sideOfField = "Away"
 	samples = 0;
 	debug = 0;
+	showTransitions = 1;
 	showDataReceived = 0;
 	maxSamples = 10;
 
@@ -82,7 +83,7 @@ def selectState():
 		BotBallDisY = abs(Statics.robotY - Statics.ballY)
 		if (BotBallDisX > 0.2 or BotBallDisY > 0.2):
 			Statics.state = "rushBall"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering rush ball"
 
 		# Analyze current status of robot
@@ -94,12 +95,17 @@ def selectState():
 		
 		# Calculate the Error in the angle position from the desired
 		Statics.AngleErr = Statics.commanded_Ang_pos - Statics.theta
+		#check for smallest angle to commanded ang
+		if (Statics.AngleErr > math.pi):
+			Statics.AngleErr = Statics.AngleErr - math.pi*2
+		elif (Statics.AngleErr < -math.pi):
+			Statics.AngleErr = Statics.AngleErr + math.pi*2
 
 		# If Error is small, then the robot is facing the goal, so transition to attack
 		if (abs(Statics.AngleErr) <= 0.5):
 			v.goVel(0,0,0)
 			Statics.state = "attackEnemy"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering attack Enemy"
 		return
 	
@@ -110,7 +116,7 @@ def selectState():
 		# If the ball is far enough from our goal then we can stop defending and get back to rushing the ball
 		if ((Statics.sideOfField == "Away" and Statics.ballX > -0.70) or (Statics.sideOfField == "Home" and Statics.ballX < 0.70)):
 			Statics.state = "rushBall"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering rush ball"
 
 		commanded_Y_pos = 0
@@ -127,7 +133,7 @@ def selectState():
 		if (abs(Statics.XErr) <= 0.2 and abs(Statics.YErr) <= 0.2):
 			v.goVel(0,0,0)
 			Statics.state = "defendGoal"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering Defend Goal"
 		return
 	
@@ -154,13 +160,15 @@ def selectState():
 
 		# If the ball is far from the goal, rush it
 		if ((Statics.sideOfField == "Away" and Statics.ballX > -0.70) or (Statics.sideOfField == "Home" and Statics.ballX < 0.70)):
-			print "Entering rush ball"
 			Statics.state = "rushBall"
+			if (Statics.showTransitions):
+				print "Entering rush ball"
 		
 		# If the ball is really close to the robot, also rush it
 		if (abs(Statics.ballX - Statics.robotX) < 0.2):
-			print "Entering Rush Ball"
 			Statics.state = "rushBall"	
+			if (Statics.showTransitions):
+				print "Entering rush ball"
 		return
 
 	#######################################
@@ -179,8 +187,9 @@ def selectState():
 		BotBallDisY = abs(Statics.robotY - Statics.ballY)
 		if (BotBallDisX > 0.2 or BotBallDisY > 0.2):
 			Statics.state = "rushBall"
-			print "Entering rush ball"
-
+			if (Statics.showTransitions):
+				print "Entering rush ball"
+				
 		# Calculate the Error from the desired position
 		Statics.XErr = commanded_X_pos - Statics.robotX
 		Statics.YErr = commanded_Y_pos - Statics.robotY
@@ -189,7 +198,7 @@ def selectState():
 		if (abs(Statics.XErr) <= 0.15 and abs(Statics.YErr) <= 0.1):
 			v.goVel(0,0,0)
 			Statics.state = "rushBall"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering rush ball"
 		return
 
@@ -200,7 +209,7 @@ def selectState():
 		# If the ball is close to our goal, go back to defend it quickly
 		if ((Statics.sideOfField == "Away" and Statics.ballX < -0.75) or (Statics.sideOfField == "Home" and Statics.ballX > 0.75)):
 			Statics.state = "goToGoal"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering Go To GOAL"
 
 		# Calculate a position that is about 0.2m behind the ball and go there
@@ -228,7 +237,7 @@ def selectState():
 		if (abs(Statics.XErr) <= 0.1 and abs(Statics.YErr) <= 0.1 and robotBehindBall):
 			v.goVel(0,0,0)
 			Statics.state = "correctAngle"
-			if (Statics.debug):
+			if (Statics.showTransitions):
 				print "Entering correctAngle"
 		return
 
