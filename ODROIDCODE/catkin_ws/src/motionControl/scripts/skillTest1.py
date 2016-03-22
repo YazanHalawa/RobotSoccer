@@ -16,10 +16,12 @@ class Statics:
 	state = "rushBall"
 	sideOfField = "Away"
 	samples = 0;
-	debug = 0;
+	angleToSpeedDelayFactor = 3
+	sampleCount = angleToSpeedDelayFactor
+	debug = 1;
 	showTransitions = 1;
 	showDataReceived = 0;
-	maxSamples = 10;
+	maxSamples = 10
 
 	# Data Received From Vision
 	robotX = float(0)
@@ -35,6 +37,8 @@ class Statics:
 	YErr = 0
 	AngleErr = 0
 	commanded_Ang_pos = 0
+	vel_X_Body_Frame = 0
+	vel_Y_Body_Frame = 0
 
 ######################################################################################################################################
 #################################################### ROS Call Back Function ##########################################################
@@ -53,6 +57,7 @@ def callback(data):
 
 	# increment count of samples
 	Statics.samples = Statics.samples + 1
+	Statics.sampleCount = Statics.sampleCount + 1
 
 ######################################################################################################################################
 ######################################################### Data Parser ################################################################
@@ -73,44 +78,9 @@ def parseData(data):
 ######################################################################################################################################
 ######################################################## State Machine ###############################################################
 ######################################################################################################################################
-def selectState():
+def selectState():	
 	#######################################
-	""" Case 1: we are in Correct Angle """
-	#######################################
-	if (Statics.state == "correctAngle"):
-		# If we become away from the ball, then rush it to get back to a position close to it
-		BotBallDisX = abs(Statics.robotX - Statics.ballX)
-		BotBallDisY = abs(Statics.robotY - Statics.ballY)
-		if (BotBallDisX > 0.2 or BotBallDisY > 0.2):
-			Statics.state = "rushBall"
-			if (Statics.showTransitions):
-				print "Entering rush ball"
-
-		# Analyze current status of robot
-		deltaX = Statics.enemyGoalCenterX - Statics.ballX
-		deltaY = Statics.enemyGoalCenterY - Statics.ballY
-		Statics.commanded_Ang_pos = float(math.atan2(deltaY, deltaX))
-		if (Statics.commanded_Ang_pos < 0):
-			Statics.commanded_Ang_pos += (math.pi*2)
-		
-		# Calculate the Error in the angle position from the desired
-		Statics.AngleErr = Statics.commanded_Ang_pos - Statics.theta
-		#check for smallest angle to commanded ang
-		if (Statics.AngleErr > math.pi):
-			Statics.AngleErr = Statics.AngleErr - math.pi*2
-		elif (Statics.AngleErr < -math.pi):
-			Statics.AngleErr = Statics.AngleErr + math.pi*2
-
-		# If Error is small, then the robot is facing the goal, so transition to attack
-		if (abs(Statics.AngleErr) <= 0.5):
-			v.goVel(0,0,0)
-			Statics.state = "attackEnemy"
-			if (Statics.showTransitions):
-				print "Entering attack Enemy"
-		return
-	
-	#######################################
-	""" Case 2: we are in Go To Goal """
+	""" Case 1: we are in Go To Goal """
 	#######################################
 	if (Statics.state == "goToGoal"):
 		# If the ball is far enough from our goal then we can stop defending and get back to rushing the ball
@@ -138,7 +108,7 @@ def selectState():
 		return
 	
 	#######################################
-	""" Case 3: we are in Defend Goal """
+	""" Case 2: we are in Defend Goal """
 	#######################################
 	if (Statics.state == "defendGoal"):
 		# Analyze current Status of the robot
@@ -172,7 +142,7 @@ def selectState():
 		return
 
 	#######################################
-	""" Case 4: we are in attack Enemy """
+	""" Case 3: we are in attack Enemy """
 	#######################################
 	if (Statics.state == "attackEnemy"):
 		# Analyze current status of robot
@@ -185,11 +155,15 @@ def selectState():
 		# If the ball is far from the robot, go back to rushing it
 		BotBallDisX = abs(Statics.robotX - Statics.ballX)
 		BotBallDisY = abs(Statics.robotY - Statics.ballY)
+		if (Statics.debug):
+			print "BotBallDist X is %f"%BotBallDisX
+			print "BotBallDist Y is %f"%BotBallDisY
+
 		if (BotBallDisX > 0.2 or BotBallDisY > 0.2):
 			Statics.state = "rushBall"
 			if (Statics.showTransitions):
 				print "Entering rush ball"
-				
+
 		# Calculate the Error from the desired position
 		Statics.XErr = commanded_X_pos - Statics.robotX
 		Statics.YErr = commanded_Y_pos - Statics.robotY
@@ -203,12 +177,12 @@ def selectState():
 		return
 
 	#######################################
-	""" Case 5: we are in rush ball """
+	""" Case 4: we are in rush ball """
 	#######################################
 	if (Statics.state == "rushBall"):
 		# If the ball is close to our goal, go back to defend it quickly
 		if ((Statics.sideOfField == "Away" and Statics.ballX < -0.75) or (Statics.sideOfField == "Home" and Statics.ballX > 0.75)):
-			Statics.state = "goToGoal"
+			#Statics.state = "goToGoal"
 			if (Statics.showTransitions):
 				print "Entering Go To GOAL"
 
@@ -232,14 +206,44 @@ def selectState():
 		# Calculate Error from desired
 		Statics.XErr = commanded_X_pos - Statics.robotX
 		Statics.YErr = commanded_Y_pos - Statics.robotY
+		if (Statics.debug):
+			print "error X is %f"%Statics.XErr
+			print "error Y is %f"%Statics.YErr
+
+		# Calculate Angle Error
+		calculateAngle()
 
 		# If Error is small, then the robot is right behind the ball, so now correct angle
-		if (abs(Statics.XErr) <= 0.1 and abs(Statics.YErr) <= 0.1 and robotBehindBall):
+		if (abs(Statics.XErr) <= 0.1 and abs(Statics.YErr) <= 0.1 and robotBehindBall and abs(Statics.AngleErr) <= 0.5):
 			v.goVel(0,0,0)
-			Statics.state = "correctAngle"
+			Statics.state = "attackEnemy"
 			if (Statics.showTransitions):
-				print "Entering correctAngle"
+				print "Entering attack Enemy"
 		return
+
+def calculateAngle():
+	# If we become away from the ball, then rush it to get back to a position close to it
+	BotBallDisX = abs(Statics.robotX - Statics.ballX)
+	BotBallDisY = abs(Statics.robotY - Statics.ballY)
+	if (BotBallDisX > 0.2 or BotBallDisY > 0.2):
+		Statics.state = "rushBall"
+		if (Statics.showTransitions):
+			print "Entering rush ball"
+
+	# Analyze current status of robot
+	deltaX = Statics.enemyGoalCenterX - Statics.ballX
+	deltaY = Statics.enemyGoalCenterY - Statics.ballY
+	Statics.commanded_Ang_pos = float(math.atan2(deltaY, deltaX))
+	if (Statics.commanded_Ang_pos < 0):
+		Statics.commanded_Ang_pos += (math.pi*2)
+	
+	# Calculate the Error in the angle position from the desired
+	Statics.AngleErr = Statics.commanded_Ang_pos - Statics.theta
+	#check for smallest angle to commanded ang
+	if (Statics.AngleErr > math.pi):
+		Statics.AngleErr = Statics.AngleErr - math.pi*2
+	elif (Statics.AngleErr < -math.pi):
+		Statics.AngleErr = Statics.AngleErr + math.pi*2
 
 def stateMachine():
 	selectState()
@@ -249,8 +253,6 @@ def stateMachine():
 		rushBall()
 	elif (Statics.state == "attackEnemy"):
 		attackEnemy()
-	elif (Statics.state == "correctAngle"):
-		correctAngle()
 	else:
 		goToGoal()
 
@@ -259,15 +261,12 @@ def stateMachine():
 ######################################################################################################################################		
 
 def correctAngle():
-	# Code for Proportional Controller
+	# Code for Proportional Controller for Angle
 	error_Max_Ang = 3.14 #in radians
 	vel_Max_Ang = 3.14
 	error_Ang = Statics.AngleErr
 	kp_Ang = float(vel_Max_Ang)/float(error_Max_Ang) # units don't match, but that's okay
 	vel_Ang = kp_Ang*error_Ang
-
-	# Send Commands to the wheels
-	v.goVel(0, 0, vel_Ang)
 
 	# Print Data
 	if (Statics.debug):
@@ -275,6 +274,8 @@ def correctAngle():
 		print "error in angle %f"%error_Ang
 		print "current Angle %f"%Statics.theta
 		print "angle vel %f"%vel_Ang
+
+	return vel_Ang
 
 def goToGoal():
 	# Code for Proportional Controller for X
@@ -373,7 +374,7 @@ def attackEnemy():
 	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
 
 	# Print Data
-	if (Statics.debug == 1 and Statics.samples == Statics.maxSamples):
+	if (Statics.debug and Statics.samples == Statics.maxSamples):
 		Statics.samples = 0
 		print "error in X %f"%error_X
 		print "current_X_pos %f"%Statics.robotX
@@ -402,11 +403,16 @@ def rushBall():
 	vel_Y = kp_Y*error_Y
 
 	# Account for Angle
-	vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
-	vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
+	if (Statics.sampleCount == Statics.angleToSpeedDelayFactor):
+		Statics.sampleCount = 0
+		Statics.vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
+		Statics.vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
+
+	# Correct Angle
+	vel_Ang = correctAngle()
 
 	# Send Commands to Wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
+	v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, vel_Ang)
 
 	# Print Data
 	if (Statics.debug):
@@ -420,8 +426,8 @@ def rushBall():
 		print "vel Y %f"%vel_Y
 		print
 
-		print "vel x body frame %f"%vel_X_Body_Frame
-		print "vel y body frame %f"%vel_Y_Body_Frame
+		print "vel x body frame %f"%Statics.vel_X_Body_Frame
+		print "vel y body frame %f"%Statics.vel_Y_Body_Frame
 
 ######################################################################################################################################
 ######################################################### Main Code ##################################################################
