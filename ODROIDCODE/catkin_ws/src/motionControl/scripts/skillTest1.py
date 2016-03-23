@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import Float64MultiArray
 import velchange as v
 from roboclaw import *
 import math
@@ -47,8 +47,8 @@ class Statics:
 
 def callback(data):
 	# Print information received from vision
-	if (Statics.showDataReceived == 1):
-		rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+	if (Statics.showDataReceived):
+		rospy.loginfo(rospy.get_caller_id() + 'I heard %f, %f, %f, %f, %f', data.data[0], data.data[1], data.data[2], data.data[3], data.data[4])
 
 	# Parse the information received from vision
 	parseData(data.data)
@@ -64,17 +64,13 @@ def callback(data):
 ######################################################### Data Parser ################################################################
 ######################################################################################################################################
 def parseData(data):
-	#break off the information
-	myList = data.split("\n")
-	robotInfo = myList[0].split(",")
-	ballInfo = myList[1].split(",")
-	
+
 	#break off to variables
-	Statics.robotX = float(robotInfo[0]);
-	Statics.robotY = float(robotInfo[1]);
-	Statics.theta = float(robotInfo[2]);
-	Statics.ballX = float(ballInfo[0])
-	Statics.ballY = float(ballInfo[1])
+	Statics.robotX = (data[0]);
+	Statics.robotY = (data[1]);
+	Statics.theta = (data[2]);
+	Statics.ballX = (data[3])
+	Statics.ballY = (data[4])
 
 ######################################################################################################################################
 ######################################################## State Machine ###############################################################
@@ -204,6 +200,7 @@ def selectState():
 		elif (Statics.sideOfField == "Away" and (Statics.ballX - Statics.robotX) > 0):
 			robotBehindBall = 1
 		else:
+
 			robotBehindBall = 0
 
 		if (Statics.debug):
@@ -437,6 +434,13 @@ def rushBall():
 	Statics.vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
 	Statics.vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 
+	#if we are close to ball and vel x and y are too small
+	Rerror = math.sqrt(error_X*error_X + error_Y*error_Y)
+	if(Rerror < .2):
+		radius_Error_Min = .2
+		Statics.vel_X_Body_Frame = kp_X * .2 * error_X/Rerror
+		Statics.vel_Y_Body_Frame = kp_Y * .2 * error_Y/Rerror
+
 	# Send Commands to Wheels
 	v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, 0)
 
@@ -469,7 +473,7 @@ def listener():
 
 	rospy.init_node('listener', anonymous=True)
 
-	rospy.Subscriber('Vision', String, callback)
+	rospy.Subscriber('Vision', Float64MultiArray, callback)
 	rospy.spin()
 
 if __name__ == '__main__':
