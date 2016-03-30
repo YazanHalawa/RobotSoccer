@@ -1,0 +1,13 @@
+/home/ecestudent/testOpenCV/CMakeFiles/DisplayImage.dir
+/home/ecestudent/testOpenCV/CMakeFiles/RedDetectingDemo.dir
+/home/ecestudent/testOpenCV/CMakeFiles/RedTrackingDemo.dir
+/home/ecestudent/testOpenCV/CMakeFiles/backgroundsub.dir
+/home/ecestudent/testOpenCV/CMakeFiles/calibrating.dir
+/home/ecestudent/testOpenCV/CMakeFiles/camshift.dir
+/home/ecestudent/testOpenCV/CMakeFiles/center.dir
+/home/ecestudent/testOpenCV/CMakeFiles/circle.dir
+/home/ecestudent/testOpenCV/CMakeFiles/circle2.dir
+/home/ecestudent/testOpenCV/CMakeFiles/contour.dir
+/home/ecestudent/testOpenCV/CMakeFiles/histo.dir
+/home/ecestudent/testOpenCV/CMakeFiles/rosvis.dir
+/home/ecestudent/testOpenCV/CMakeFiles/selection.dir

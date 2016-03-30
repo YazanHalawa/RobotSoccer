@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ecestudent/testOpenCV/kalman.cpp
+opencv2/video/tracking.hpp
+/home/ecestudent/testOpenCV/opencv2/video/tracking.hpp
+

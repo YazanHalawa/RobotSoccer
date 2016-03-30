@@ -1,0 +1,5 @@
+/home/ecestudent/testOpenCV/CMakeFiles/DisplayImage.dir
+/home/ecestudent/testOpenCV/CMakeFiles/RedDetectingDemo.dir
+/home/ecestudent/testOpenCV/CMakeFiles/RedTrackingDemo.dir
+/home/ecestudent/testOpenCV/CMakeFiles/multipleObjectTracking.dir
+/home/ecestudent/testOpenCV/CMakeFiles/threshholding.dir

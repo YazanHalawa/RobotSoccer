@@ -1,0 +1,2 @@
+/home/ecestudent/testOpenCV/VK/CMakeFiles/cal.dir
+/home/ecestudent/testOpenCV/VK/CMakeFiles/computer_vision.dir

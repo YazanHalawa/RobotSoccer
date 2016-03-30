@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ecestudent/testOpenCV/multipleObjectTracking.cpp
+sstream
+-
+string
+-
+iostream
+-
+opencv2/highgui/highgui.hpp
+/home/ecestudent/testOpenCV/opencv2/highgui/highgui.hpp
+opencv/cv.hpp
+/home/ecestudent/testOpenCV/opencv/cv.hpp
+std_msgs/String.h
+/home/ecestudent/testOpenCV/std_msgs/String.h
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/video/background_segm.hpp
+-
+stdio.h
+-
+cmath
+-
+
