@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/odroid/catkin_ws/devel/setup.sh
+    local-name: /home/ecestudent/catkin_ws/devel/setup.sh

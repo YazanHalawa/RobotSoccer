@@ -150,20 +150,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-Vision/CMakeFiles/Vision.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/Vision.dir/rule
-.PHONY : Vision/CMakeFiles/Vision.dir/rule
-
-# Convenience name for target.
-Vision: Vision/CMakeFiles/Vision.dir/rule
-.PHONY : Vision
-
-# fast build rule for target.
-Vision/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/Vision.dir/build.make Vision/CMakeFiles/Vision.dir/build
-.PHONY : Vision/fast
-
-# Convenience name for target.
 Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
 	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
 .PHONY : Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
@@ -289,12 +275,26 @@ std_msgs_generate_messages_py/fast:
 	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/std_msgs_generate_messages_py.dir/build.make Vision/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
 
+# Convenience name for target.
+Vision/CMakeFiles/talker.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/talker.dir/rule
+.PHONY : Vision/CMakeFiles/talker.dir/rule
+
+# Convenience name for target.
+talker: Vision/CMakeFiles/talker.dir/rule
+.PHONY : talker
+
+# fast build rule for target.
+talker/fast:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/build
+.PHONY : talker/fast
+
 src/multipleObjectTracking.o: src/multipleObjectTracking.cpp.o
 .PHONY : src/multipleObjectTracking.o
 
 # target to build an object file
 src/multipleObjectTracking.cpp.o:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/Vision.dir/build.make Vision/CMakeFiles/Vision.dir/src/multipleObjectTracking.cpp.o
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.o
 .PHONY : src/multipleObjectTracking.cpp.o
 
 src/multipleObjectTracking.i: src/multipleObjectTracking.cpp.i
@@ -302,7 +302,7 @@ src/multipleObjectTracking.i: src/multipleObjectTracking.cpp.i
 
 # target to preprocess a source file
 src/multipleObjectTracking.cpp.i:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/Vision.dir/build.make Vision/CMakeFiles/Vision.dir/src/multipleObjectTracking.cpp.i
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.i
 .PHONY : src/multipleObjectTracking.cpp.i
 
 src/multipleObjectTracking.s: src/multipleObjectTracking.cpp.s
@@ -310,7 +310,7 @@ src/multipleObjectTracking.s: src/multipleObjectTracking.cpp.s
 
 # target to generate assembly for a file
 src/multipleObjectTracking.cpp.s:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/Vision.dir/build.make Vision/CMakeFiles/Vision.dir/src/multipleObjectTracking.cpp.s
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.s
 .PHONY : src/multipleObjectTracking.cpp.s
 
 # Help Target
@@ -319,7 +319,6 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... Vision"
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
@@ -335,6 +334,7 @@ help:
 	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_py"
+	@echo "... talker"
 	@echo "... test"
 	@echo "... src/multipleObjectTracking.o"
 	@echo "... src/multipleObjectTracking.i"

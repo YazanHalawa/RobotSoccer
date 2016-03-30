@@ -59,6 +59,10 @@ Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.o
  /opt/ros/indigo/include/ros/wall_timer.h
  /opt/ros/indigo/include/ros/wall_timer_options.h
  /opt/ros/indigo/include/rosconsole/macros_generated.h
+ /opt/ros/indigo/include/std_msgs/Float64MultiArray.h
+ /opt/ros/indigo/include/std_msgs/MultiArrayDimension.h
+ /opt/ros/indigo/include/std_msgs/MultiArrayLayout.h
  /opt/ros/indigo/include/std_msgs/String.h
+ /usr/include/opencv/cv.h
  /usr/include/opencv/cv.hpp
  /usr/include/opencv2/highgui/highgui.hpp

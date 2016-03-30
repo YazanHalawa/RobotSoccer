@@ -1,2 +1,2 @@
-vision
+Vision
 -DCATKIN_DEVEL_PREFIX=/home/ecestudent/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ecestudent/catkin_ws/install -G Unix Makefiles
