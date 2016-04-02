@@ -6,6 +6,7 @@ import velchange as v
 from roboclaw import *
 import math
 import time
+import sys
 
 ######################################################################################################################################
 ##################################################### Static Variables ###############################################################
@@ -89,7 +90,7 @@ def selectState():
 			if (Statics.showTransitions):
 				print "Entering rush ball"
 
-		commanded_Y_pos = 0
+		commanded_Y_pos = 0.0
 		if (Statics.sideOfField == "Away"):
 			commanded_X_pos = float(-1.25)
 		else:
@@ -101,7 +102,7 @@ def selectState():
 
 		# If Error is small, then we are at the goal, transition to defend
 		if (abs(Statics.XErr) <= 0.2 and abs(Statics.YErr) <= 0.2):
-			v.goVel(0,0,0)
+			v.goVel(0.0,0.0,0.0)
 			Statics.state = "defendGoal"
 			if (Statics.showTransitions):
 				print "Entering Defend Goal"
@@ -140,6 +141,9 @@ def selectState():
 			Statics.suspendDefense = 1
 			if (Statics.showTransitions):
 				print "Entering rush ball"
+		# If the robot has reached where it is supposed to, stop it temporarily in that position
+		if (abs(Statics.XErr) < 0.2):
+			v.goVel(0.0, 0.0, 0.0);
 		return
 
 	#######################################
@@ -181,7 +185,7 @@ def selectState():
 
 		# If Error is small, then that means we scored a goal, transition back to rush ball
 		if (abs(Statics.XErr) <= 0.15 and abs(Statics.YErr) <= 0.1):
-			v.goVel(0,0,0)
+			v.goVel(0.0,0.0,0.0)
 			Statics.state = "rushBall"
 			if (Statics.showTransitions):
 				print "Entering rushball"
@@ -208,9 +212,9 @@ def selectState():
 		commanded_Y_pos = Statics.ballY + ((-0.2)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
 
 		# Check if the robot is currently behind the ball
-		if (Statics.sideOfField == "Home" and (Statics.ballX - Statics.robotX) < 0):
+		if (Statics.sideOfField == "Home" and (Statics.ballX - Statics.robotX) < 0.0):
 			robotBehindBall = 1
-		elif (Statics.sideOfField == "Away" and (Statics.ballX - Statics.robotX) > 0):
+		elif (Statics.sideOfField == "Away" and (Statics.ballX - Statics.robotX) > 0.0):
 			robotBehindBall = 1
 		else:
 
@@ -238,7 +242,7 @@ def selectState():
 
 		# If Error is small, then the robot is right behind the ball, so now correct angle
 		if (abs(Statics.XErr) <= 0.1 and abs(Statics.YErr) <= 0.1 and robotBehindBall):# and abs(Statics.AngleErr) <= 0.5):
-			v.goVel(0,0,0)
+			v.goVel(0.0,0.0,0.0)
 			Statics.state = "correctAngle"
 			if (Statics.showTransitions):
 				print "Entering correct Angle"
@@ -256,7 +260,7 @@ def selectState():
 
 		# If Error is small, then the robot is facing the goal, so transition to attack
 		if (abs(Statics.AngleErr) <= 0.25):
-			v.goVel(0,0,0)
+			v.goVel(0.0,0.0,0.0)
 			# Kicker
 			#kicker()
 			Statics.state = "attackEnemy"
@@ -321,13 +325,13 @@ def correctAngle():
 	else:
 		vel_Max_Ang = 3.14;
 	if (abs(Statics.theta - Statics.oldAngle) < 0.1):
-		vel_Max_Ang = 4
+		vel_Max_Ang = 4.0
 	error_Ang = Statics.AngleErr
 	kp_Ang = float(vel_Max_Ang)/float(error_Max_Ang) # units don't match, but that's okay
 	vel_Ang = kp_Ang*error_Ang
 
 	# Send commands to the wheels
-	v.goVel(0, 0, vel_Ang)
+	v.goVel(0.0, 0.0, vel_Ang)
 
 	# Print Data
 	if (Statics.debug):
@@ -339,25 +343,25 @@ def correctAngle():
 
 def goToGoal():
 	# Code for Proportional Controller for X
-	error_Max_X = 2
-	vel_Max_X = 1
+	error_Max_X = 2.0
+	vel_Max_X = 1.0
 	error_X = Statics.XErr
 	kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
 	vel_X = kp_X*error_X
 
 	# Code for Proportional Controller for Y
-	error_Max_Y = 2
-	vel_Max_Y = 1
+	error_Max_Y = 2.0
+	vel_Max_Y = 1.0
 	error_Y = Statics.YErr
 	kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
 	vel_Y = kp_Y*error_Y
 
 	# Account for the angle of the robot
 	vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
-	vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
+	vel_Y_Body_Frame = -1.0*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 	
 	# Send commands to the wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
+	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug and Statics.samples == Statics.maxSamples):
@@ -377,24 +381,24 @@ def goToGoal():
 def defendGoal():
 	# Code for Proportional Controller
 	error_Max_X = .5
-	vel_Max_X = 1
+	vel_Max_X = 1.0
 	error_X = Statics.XErr
 	kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
 	vel_X = kp_X*error_X
 
 	# Code for Proportional Controller
 	error_Max_Y = .5
-	vel_Max_Y = 1
+	vel_Max_Y = 1.0
 	error_Y = Statics.YErr
 	kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
 	vel_Y = kp_Y*error_Y
 
 	# Account for angle of the robot
 	vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
-	vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*vel_Y - math.sin(Statics.theta)*vel_X)
+	vel_Y_Body_Frame = -1.0*(math.cos(Statics.theta)*vel_Y - math.sin(Statics.theta)*vel_X)
 
 	# Send Commands to wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
+	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug and Statics.samples == Statics.maxSamples):
@@ -418,7 +422,7 @@ def attackEnemy():
 		if (abs(Statics.robotX - Statics.oldX) < 0.5):
 			error_Max_X = 1.3
 	else:
-		error_Max_X = 2
+		error_Max_X = 2.0
 	vel_Max_X = 1.4
 	error_X = Statics.XErr
 	kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
@@ -430,7 +434,7 @@ def attackEnemy():
 		if (abs(Statics.robotY - Statics.oldY) < 0.5):
 			error_Max_Y = 1.3
 	else:
-		error_Max_Y = 2
+		error_Max_Y = 2.0
 	vel_Max_Y = 1.4
 	error_Y = Statics.YErr
 	kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
@@ -438,10 +442,10 @@ def attackEnemy():
 
 	# Account for angle of robot
 	vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
-	vel_Y_Body_Frame = -1*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
+	vel_Y_Body_Frame = -1.0*(math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 	
 	# Send Commands to Wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0)
+	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug and Statics.samples == Statics.maxSamples):
@@ -464,7 +468,7 @@ def rushBall():
 		if (abs(Statics.robotX - Statics.oldX) < 0.5):
 			error_Max_X = 1.3
 	else:
-		error_Max_X = 2
+		error_Max_X = 2.0
 	vel_Max_X = 1.4
 	error_X = Statics.XErr
 	kp_X = float(vel_Max_X)/float(error_Max_X) # units don't match, but that's okay
@@ -476,7 +480,7 @@ def rushBall():
 		if (abs(Statics.robotY - Statics.oldY) < 0.5):
 			error_Max_Y = 1.3
 	else:
-		error_Max_Y = 2
+		error_Max_Y = 2.0
 	vel_Max_Y = 1.4
 	error_Y = Statics.YErr
 	kp_Y = float(vel_Max_Y)/float(error_Max_Y) # units don't match, but that's okay
@@ -494,7 +498,7 @@ def rushBall():
 	# 	Statics.vel_Y_Body_Frame = kp_Y * .2 * error_Y/Rerror
 
 	# Send Commands to Wheels
-	v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, 0)
+	v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug):

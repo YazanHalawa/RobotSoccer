@@ -72,12 +72,14 @@ sampleM3Forward = 0;
 sampleM3Backward = 0;
 
 
-speed = 48
+speed = 80
 
 stop();
 
+print "M1 forward 129, speed is: %f" %speed
 #Forwards
 M1Forward(129,speed); #M1 backward sample 1
+print "M2 forward 128, speed is: %f" %speed
 M2Forward(128,speed); #M2 forward sample 1
 time.sleep(2)
 

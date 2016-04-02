@@ -230,9 +230,15 @@ if __name__ == '__main__':
   #time.sleep(3)
   #goXYThetaAccel(0.0,0.0,0.0,1)
   #leftTurn()
-  SetM2pidq(128,65536,32768,16384,243759)
-  SetM2pidq(129,65536,32768,16384,264568)
-  SetM1pidq(129,65536,32768,16384,256704)
+  # SetM2pidq(128,65536,32768,16384,243759)
+  # SetM2pidq(129,65536,32768,16384,264568)
+  # SetM1pidq(129,65536,32768,16384,256704)
+  p = int(65536 * 4) #262144
+  i = int(65536 * 2) #131072
+  d = int(65536 * 6)  #65536
+  SetM1pidq(129,p,i,d,158372)
+  SetM2pidq(128,p,i,d,164501)
+  SetM2pidq(129,p,i,d,141356)
   myCircle()
   #mySquare()
   #myRand()
