@@ -12,9 +12,9 @@ i = int(65536 * 2) #131072
 d = int(65536 * 6)  #65536
 q = 308419
 
-SetM1pidq(129,p,i,d,158372)
-SetM2pidq(128,p,i,d,164501)
-SetM2pidq(129,p,i,d,141356)
+SetM2pidq(128,p,i,d,150000) # M2
+SetM1pidq(129,p,i,d,160000) # M1
+SetM2pidq(129,p,i,d,150000) # M3
 
 print readmainbattery()
 p1,i1,d1,q1 = readM1pidq(128)
@@ -72,14 +72,25 @@ sampleM3Forward = 0;
 sampleM3Backward = 0;
 
 
-speed = 80
+speed = 40
 
 stop();
 
-print "M1 forward 129, speed is: %f" %speed
+print "M1 backward 129, speed is: %f" %speed
 #Forwards
-M1Forward(129,speed); #M1 backward sample 1
-print "M2 forward 128, speed is: %f" %speed
+M1Backward(129,speed); #M1 backward sample 1
+print "M2 backward 128, speed is: %f" %speed
+M2Backward(128,speed); #M2 forward sample 1
+time.sleep(2)
+
+speedM1Backward=speedM1Backward+read(129,1)
+speedM2Backward=speedM2Backward+read(128,2)
+
+stop();
+time.sleep(1);
+
+#Backwards
+M1Forward(129,speed); #M1 forward sample 1
 M2Forward(128,speed); #M2 forward sample 1
 time.sleep(2)
 
@@ -89,43 +100,20 @@ speedM2Forward=speedM2Forward+read(128,2)
 stop();
 time.sleep(1);
 
-#Backwards
-M1Backward(129,speed); #M1 forward sample 1
-M2Backward(128,speed); #M2 backward sample 1
-time.sleep(2)
-
-speedM1Backward=speedM1Backward+read(129,1)
-speedM2Backward=speedM2Backward+read(128,2)
-
-stop();
-time.sleep(1);
-
 #Left back
-M1Backward(129,speed); #M1 forward sample 1
-M2Backward(129,speed); #M3 backward sample 2 
-time.sleep(2)
-
-speedM1Backward=speedM1Backward+read(129,1)
-sampleM1Backward = sampleM1Backward + 1;
-speedM3Backward=speedM3Backward+read(129,2)
-sampleM3Backward = sampleM3Backward + 1;
-stop();
-time.sleep(1);
-
-#Left forward
 M2Forward(128,speed); #M2 forward sample 1
 M2Backward(129,speed); #M3 backward sample 2 
 time.sleep(2)
 
-speedM2Forward=speedM2Forward+read(128,2)
+speedM2Forward=speedM2Forward+read(128, 2)
 sampleM2Forward = sampleM2Forward + 1;
 speedM3Backward=speedM3Backward+read(129,2)
 sampleM3Backward = sampleM3Backward + 1;
 stop();
 time.sleep(1);
 
-# RightBack
-M2Backward(128,speed); #M2 forward sample 1
+# Right Forward
+M2Backward(128,speed); #M2 Backward sample 2
 M2Forward(129,speed); #M3 backward sample 2 
 time.sleep(2)
 
@@ -136,19 +124,31 @@ sampleM3Forward = sampleM3Forward + 1;
 stop();
 time.sleep(1);
 
-# Right Forward
+# RightBack
 M1Forward(129,speed); #M1 forward sample 1
 M2Forward(129,speed); #M3 backward sample 2 
 time.sleep(2)
 
-speedM1Forward=speedM1Forward+read(129,1)
+speedM1Forward=speedM1Forward+read(129, 1)
 sampleM1Forward = sampleM1Forward + 1;
 speedM3Forward=speedM3Forward+read(129,2)
 sampleM3Forward = sampleM3Forward + 1;
 stop();
 time.sleep(1);
 
+
+#Left forward
+M2Backward(129,speed); #M3 Backward sample 2
+M1Backward(129,speed); #M1 backward sample 1 
+time.sleep(2)
+
+speedM2Backward=speedM2Backward+read(129, 2)
+sampleM2Backward = sampleM2Backward + 1;
+speedM1Backward=speedM1Backward+read(129, 1)
+sampleM1Backward = sampleM1Backward + 1;
 stop();
+time.sleep(1);
+
 
 speedM1Forward=speedM1Forward/2
 speedM1Backward=speedM1Backward/2
@@ -181,14 +181,14 @@ speedM1 = ((-1)*speedM1Forward + speedM1Backward)/2
 speedM2 = ((-1)*speedM2Forward + speedM2Backward)/2
 speedM3 = ((-1)*speedM3Forward + speedM3Backward)/2
 
-# print "speed m1 is %f"%float(speedM1)
-# print "speed m2 is %f"%float(speedM2)
-# print "speed m3 is %f"%float(speedM3)
+print "speed m1 is %f"%float(speedM1)
+print "speed m2 is %f"%float(speedM2)
+print "speed m3 is %f"%float(speedM3)
 
 
-SetM1pidq(129,p,i,d,158372)
-SetM2pidq(128,p,i,d,164501)
-SetM2pidq(129,p,i,d,141356)
+# SetM1pidq(129,p,i,d,158372)
+# SetM2pidq(128,p,i,d,164501)
+# SetM2pidq(129,p,i,d,141356)
 
 p1,i1,d1,q1 = readM1pidq(129)
 print "128 M1 P=%.2f" % (p1/65536.0)

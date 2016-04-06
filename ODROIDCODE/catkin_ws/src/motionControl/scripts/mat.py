@@ -27,15 +27,15 @@ r3y = math.sin(r3theta)*r
 #print r3x
 #print r3y
 
-s1theta = r1theta + math.pi/2 # add pi/2 if wheel forward were to spin robot ccw
+s1theta = r1theta + math.pi/2
 s1x = math.cos(s1theta)
 s1y = math.sin(s1theta)
 
-s2theta = r2theta - math.pi/2 # sub pi/2 if wheel forward were to spin robot cw
+s2theta = r2theta - math.pi/2
 s2x = math.cos(s2theta)
 s2y = math.sin(s2theta)
 
-s3theta = r3theta + math.pi/2 # add pi/2 if wheel forward were to spin robot ccw
+s3theta = r3theta + math.pi/2
 s3x = math.cos(s3theta)
 s3y = math.sin(s3theta)
 #print s1x

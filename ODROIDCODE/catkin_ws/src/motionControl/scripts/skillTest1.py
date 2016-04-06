@@ -15,7 +15,7 @@ import sys
 class Statics:
 	# Varibles to setup up robot's initial state
 	state = "rushBall"
-	sideOfField = "Away"
+	sideOfField = "Home"
 	samples = 0;
 	debug = 0;
 	angleSamples = 0;
@@ -537,9 +537,9 @@ if __name__ == '__main__':
 	p = int(65536 * 4) #262144
 	i = int(65536 * 2) #131072
 	d = int(65536 * 6)  #65536
-	SetM1pidq(129,p,i,d,158372)
-	SetM2pidq(128,p,i,d,164501)
-	SetM2pidq(129,p,i,d,141356)
+	SetM2pidq(128,p,i,d,150000) # M2
+	SetM1pidq(129,p,i,d,160000) # M1
+	SetM2pidq(129,p,i,d,150000) # M3
 
 	# Setup some variables
 	setupField()

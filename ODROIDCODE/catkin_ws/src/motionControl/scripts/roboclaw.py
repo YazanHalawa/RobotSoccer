@@ -677,8 +677,10 @@ port = serial.Serial("/dev/ttySAC0", baudrate=38400, timeout=1)
 #M1Forward(0)
 #Get version string
 sendcommand(129,21)
-rcv = port.read(32)
-print repr(rcv)
+rcv1 = port.read(32)
+sendcommand(128, 21)
+rcv2 = port.read(32)
+print repr(rcv1 + "\n" + rcv2)
 
 #M1Backward(129, 10)
 #M1Forward(128, 40)

@@ -74,7 +74,7 @@ def goXYOmegaAccel(x,y,theta,time=1):
 
 def goVel(x,y,theta,time=1):
   v1,v2,v3 = mat.getWheelVel(x,y,theta)
-
+  # print v1, v2, v3;
   s1 = radianToQpps(v1)
   s2 = radianToQpps(v2)
   s3 = radianToQpps(v3)
@@ -117,8 +117,6 @@ def myCircle():
   print "End of Circle Test"
 
 def myRand():
-  """This functions gets the robot to go in a square"""
-  print "Starting Square Test"
   print "Going somewhere"
   #go forward 2 sec
   goVel(0.25,.25,0)
@@ -236,11 +234,11 @@ if __name__ == '__main__':
   p = int(65536 * 4) #262144
   i = int(65536 * 2) #131072
   d = int(65536 * 6)  #65536
-  SetM1pidq(129,p,i,d,158372)
-  SetM2pidq(128,p,i,d,164501)
-  SetM2pidq(129,p,i,d,141356)
+  SetM2pidq(128,p,i,d,150000) # M2
+  SetM1pidq(129,p,i,d,160000) # M1
+  SetM2pidq(129,p,i,d,150000) # M3
   myCircle()
-  #mySquare()
+  mySquare()
   #myRand()
 #s1 = radianToQpps(v1)
 #s2 = radianToQpps(v2)
