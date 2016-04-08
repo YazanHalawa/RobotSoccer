@@ -8,7 +8,7 @@ import math
 
 realWorldOffset = 1 #1.698
 s = .0285 #radius of wheel
-r = .1 #radius from center to center of wheel
+r = .105 #radius from center to center of wheel
 
 r1theta = math.pi/3.0
 r1x = math.cos(r1theta)*r
@@ -27,15 +27,15 @@ r3y = math.sin(r3theta)*r
 #print r3x
 #print r3y
 
-s1theta = r1theta + math.pi/2
+s1theta = r1theta - math.pi/2
 s1x = math.cos(s1theta)
 s1y = math.sin(s1theta)
 
-s2theta = r2theta - math.pi/2
+s2theta = r2theta + math.pi/2
 s2x = math.cos(s2theta)
 s2y = math.sin(s2theta)
 
-s3theta = r3theta + math.pi/2
+s3theta = r3theta - math.pi/2
 s3x = math.cos(s3theta)
 s3y = math.sin(s3theta)
 #print s1x
@@ -44,9 +44,9 @@ s3y = math.sin(s3theta)
 #print s2y
 #print s3x
 #print s3y
-mSub = matrix( [[s1x,s1y,-1*(s1y*r1x - s1x*r1y)],
-                [s2x,s2y,-1*(s2y*r2x - s2x*r2y)],
-                [s3x,s3y,-1*(s3y*r3x - s3x*r3y)]] )
+mSub = matrix( [[s1x,s1y,1*(s1y*r1x - s1x*r1y)],
+                [s2x,s2y,1*(s2y*r2x - s2x*r2y)],
+                [s3x,s3y,1*(s3y*r3x - s3x*r3y)]] )
                 
 #print mSub
 

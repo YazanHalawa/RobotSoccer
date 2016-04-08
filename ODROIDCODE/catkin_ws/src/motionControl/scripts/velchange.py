@@ -81,7 +81,7 @@ def goVel(x,y,theta,time=1):
   r1 = readM2speed(128)
   r2 = readM1speed(129)
   r3 = readM2speed(129)
-
+  print r1, r2, r3, s1, s2, s3;
   # if DEBUG:
   #   print r1
   #   print r2
@@ -110,7 +110,7 @@ def myCircle():
   goVel(0,0,0)
   t.sleep(0.2)
 
-  goVel(0,0,5)
+  goVel(0,0,2)
   t.sleep(5)
   goVel(0,0,0)
   t.sleep(2)
