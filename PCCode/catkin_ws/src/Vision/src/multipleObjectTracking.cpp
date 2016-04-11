@@ -16,6 +16,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <ctime>
 #include "/usr/include/opencv2/highgui/highgui.hpp"
 #include "/usr/include/opencv/cv.hpp"
 #include "ros/ros.h"
@@ -62,23 +63,23 @@ int HOME2_X = 1;
 int HOME2_Y = 1;
 int HOME2_THETA = 1;
 
-int AWAY_H_MIN = 0;
-int AWAY_H_MAX = 256;
-int AWAY_S_MIN = 0;
-int AWAY_S_MAX = 256;
-int AWAY_V_MIN = 0;
-int AWAY_V_MAX = 256;
+int AWAY_H_MIN = 161;
+int AWAY_H_MAX = 184;
+int AWAY_S_MIN = 183;
+int AWAY_S_MAX = 231;
+int AWAY_V_MIN = 108;
+int AWAY_V_MAX = 216;
 
 int AWAY_X = 1;
 int AWAY_Y = 1;
 int AWAY_THETA = 1;
 
-int AWAY2_H_MIN = 0;
-int AWAY2_H_MAX = 256;
-int AWAY2_S_MIN = 0;
-int AWAY2_S_MAX = 256;
-int AWAY2_V_MIN = 0;
-int AWAY2_V_MAX = 256;
+int AWAY2_H_MIN = 161;
+int AWAY2_H_MAX = 184;
+int AWAY2_S_MIN = 183;
+int AWAY2_S_MAX = 231;
+int AWAY2_V_MIN = 108;
+int AWAY2_V_MAX = 216;
 
 int AWAY2_X = 1;
 int AWAY2_Y = 1;
@@ -114,6 +115,8 @@ const int MAX_OBJECT_DIST = 30;
 //names that will appear at the top of each window
 const string windowName = "FieldImage";
 const string trackbarWindowName = "Trackbars";
+const string trackbarWindowNameAway = "Away Trackbars";
+
 
 typedef struct {
 	string w_name = "";
@@ -154,28 +157,28 @@ HOME_S_MIN = getTrackbarPos( "HOME_S_MIN", trackbarWindowName);
 HOME_S_MAX = getTrackbarPos( "HOME_S_MAX", trackbarWindowName);
 HOME_V_MIN = getTrackbarPos( "HOME_V_MIN", trackbarWindowName);
 HOME_V_MAX = getTrackbarPos( "HOME_V_MAX", trackbarWindowName);
-
+/*
 HOME2_H_MIN = getTrackbarPos( "HOME2_H_MIN", trackbarWindowName);
 HOME2_H_MAX = getTrackbarPos( "HOME2_H_MAX", trackbarWindowName);
 HOME2_S_MIN = getTrackbarPos( "HOME2_S_MIN", trackbarWindowName);
 HOME2_S_MAX = getTrackbarPos( "HOME2_S_MAX", trackbarWindowName);
 HOME2_V_MIN = getTrackbarPos( "HOME2_V_MIN", trackbarWindowName);
 HOME2_V_MAX = getTrackbarPos( "HOME2_V_MAX", trackbarWindowName);
-/*
-AWAY_H_MIN = getTrackbarPos( "AWAY_H_MIN", trackbarWindowName);
-AWAY_H_MAX = getTrackbarPos( "AWAY_H_MAX", trackbarWindowName);
-AWAY_S_MIN = getTrackbarPos( "AWAY_S_MIN", trackbarWindowName);
-AWAY_S_MAX = getTrackbarPos( "AWAY_S_MAX", trackbarWindowName);
-AWAY_V_MIN = getTrackbarPos( "AWAY_V_MIN", trackbarWindowName);
-AWAY_V_MAX = getTrackbarPos( "AWAY_V_MAX", trackbarWindowName);
-
-AWAY2_H_MIN = getTrackbarPos( "AWAY2_H_MIN", trackbarWindowName);
-AWAY2_H_MAX = getTrackbarPos( "AWAY2_H_MAX", trackbarWindowName);
-AWAY2_S_MIN = getTrackbarPos( "AWAY2_S_MIN", trackbarWindowName);
-AWAY2_S_MAX = getTrackbarPos( "AWAY2_S_MAX", trackbarWindowName);
-AWAY2_V_MIN = getTrackbarPos( "AWAY2_V_MIN", trackbarWindowName);
-AWAY2_V_MAX = getTrackbarPos( "AWAY2_V_MAX", trackbarWindowName);
 */
+AWAY_H_MIN = getTrackbarPos( "AWAY_H_MIN", trackbarWindowNameAway);
+AWAY_H_MAX = getTrackbarPos( "AWAY_H_MAX", trackbarWindowNameAway);
+AWAY_S_MIN = getTrackbarPos( "AWAY_S_MIN", trackbarWindowNameAway);
+AWAY_S_MAX = getTrackbarPos( "AWAY_S_MAX", trackbarWindowNameAway);
+AWAY_V_MIN = getTrackbarPos( "AWAY_V_MIN", trackbarWindowNameAway);
+AWAY_V_MAX = getTrackbarPos( "AWAY_V_MAX", trackbarWindowNameAway);
+
+AWAY2_H_MIN = getTrackbarPos( "AWAY2_H_MIN", trackbarWindowNameAway);
+AWAY2_H_MAX = getTrackbarPos( "AWAY2_H_MAX", trackbarWindowNameAway);
+AWAY2_S_MIN = getTrackbarPos( "AWAY2_S_MIN", trackbarWindowNameAway);
+AWAY2_S_MAX = getTrackbarPos( "AWAY2_S_MAX", trackbarWindowNameAway);
+AWAY2_V_MIN = getTrackbarPos( "AWAY2_V_MIN", trackbarWindowNameAway);
+AWAY2_V_MAX = getTrackbarPos( "AWAY2_V_MAX", trackbarWindowNameAway);
+
 }
 string intToString(int number){
 
@@ -204,6 +207,7 @@ int image_y(int cartesian_y){
 void createTrackbars(){
 	//create window for trackbars
 	namedWindow(trackbarWindowName,0);
+	namedWindow(trackbarWindowNameAway,0);
 
 	//create trackbars and insert them into window
 	//3 parameters are: the address of the variable that is changing when the trackbar is moved(eg.H_LOW),
@@ -228,28 +232,28 @@ void createTrackbars(){
 	createTrackbar( "HOME_S_MAX", trackbarWindowName, &HOME_S_MAX, 256, on_trackbar );
 	createTrackbar( "HOME_V_MIN", trackbarWindowName, &HOME_V_MIN, 256, on_trackbar );
 	createTrackbar( "HOME_V_MAX", trackbarWindowName, &HOME_V_MAX, 256, on_trackbar );
-
+/*
 	createTrackbar( "HOME2_H_MIN", trackbarWindowName, &HOME2_H_MIN, 256, on_trackbar );
 	createTrackbar( "HOME2_H_MAX", trackbarWindowName, &HOME2_H_MAX, 256, on_trackbar );
 	createTrackbar( "HOME2_S_MIN", trackbarWindowName, &HOME2_S_MIN, 256, on_trackbar );
 	createTrackbar( "HOME2_S_MAX", trackbarWindowName, &HOME2_S_MAX, 256, on_trackbar );
 	createTrackbar( "HOME2_V_MIN", trackbarWindowName, &HOME2_V_MIN, 256, on_trackbar );
 	createTrackbar( "HOME2_V_MAX", trackbarWindowName, &HOME2_V_MAX, 256, on_trackbar );
-/*
-	createTrackbar( "AWAY_H_MIN", trackbarWindowName, &AWAY_H_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY_H_MAX", trackbarWindowName, &AWAY_H_MAX, 256, on_trackbar );
-	createTrackbar( "AWAY_S_MIN", trackbarWindowName, &AWAY_S_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY_S_MAX", trackbarWindowName, &AWAY_S_MAX, 256, on_trackbar );
-	createTrackbar( "AWAY_V_MIN", trackbarWindowName, &AWAY_V_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY_V_MAX", trackbarWindowName, &AWAY_V_MAX, 256, on_trackbar );
-
-	createTrackbar( "AWAY2_H_MIN", trackbarWindowName, &AWAY2_H_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY2_H_MAX", trackbarWindowName, &AWAY2_H_MAX, 256, on_trackbar );
-	createTrackbar( "AWAY2_S_MIN", trackbarWindowName, &AWAY2_S_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY2_S_MAX", trackbarWindowName, &AWAY2_S_MAX, 256, on_trackbar );
-	createTrackbar( "AWAY2_V_MIN", trackbarWindowName, &AWAY2_V_MIN, 256, on_trackbar );
-	createTrackbar( "AWAY2_V_MAX", trackbarWindowName, &AWAY2_V_MAX, 256, on_trackbar );
 */
+	createTrackbar( "AWAY_H_MIN", trackbarWindowNameAway, &AWAY_H_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY_H_MAX", trackbarWindowNameAway, &AWAY_H_MAX, 256, on_trackbar );
+	createTrackbar( "AWAY_S_MIN", trackbarWindowNameAway, &AWAY_S_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY_S_MAX", trackbarWindowNameAway, &AWAY_S_MAX, 256, on_trackbar );
+	createTrackbar( "AWAY_V_MIN", trackbarWindowNameAway, &AWAY_V_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY_V_MAX", trackbarWindowNameAway, &AWAY_V_MAX, 256, on_trackbar );
+
+	createTrackbar( "AWAY2_H_MIN", trackbarWindowNameAway, &AWAY2_H_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY2_H_MAX", trackbarWindowNameAway, &AWAY2_H_MAX, 256, on_trackbar );
+	createTrackbar( "AWAY2_S_MIN", trackbarWindowNameAway, &AWAY2_S_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY2_S_MAX", trackbarWindowNameAway, &AWAY2_S_MAX, 256, on_trackbar );
+	createTrackbar( "AWAY2_V_MIN", trackbarWindowNameAway, &AWAY2_V_MIN, 256, on_trackbar );
+	createTrackbar( "AWAY2_V_MAX", trackbarWindowNameAway, &AWAY2_V_MAX, 256, on_trackbar );
+
 
 }
 void drawObject(int x,int y,Mat &frame){
@@ -411,13 +415,15 @@ int main(int argc, char* argv[])
 	}
 
 	VideoCapture capture;
-	capture.open("http://192.168.1.79:8080/stream?topic=/image&dummy=param.mjpg");
+	capture.open("http://192.168.1.78:8080/stream?topic=/image&dummy=param.mjpg");
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
 
 	ball_pos.w_name = "Ball config";
 	home_pos.w_name = "Home config";
-	home2_pos.w_name = "Home2 config";
+	//home2_pos.w_name = "Home2 config";
+	away_pos.w_name = "Away config";
+	away2_pos.w_name = "Away2 config";
 
 	//start an infinite loop where webcam feed is copied to cameraFeed matrix
 	//all of our operations will be performed within this loop
@@ -430,7 +436,11 @@ int main(int argc, char* argv[])
 
 	ros::Rate loop_rate(100);
 
+	clock_t start = clock();
+	int loop_count = 0;
+
 	while(1){
+		loop_count++;
 		//store image to matrix
 		capture.read(cameraFeed);
 
@@ -444,6 +454,12 @@ int main(int argc, char* argv[])
 
 		trackObject(ball_pos, HSV, BALL_H_MIN, BALL_S_MIN, BALL_V_MIN, BALL_H_MAX, BALL_S_MAX, BALL_V_MAX );
 		trackObject(home_pos, HSV, HOME_H_MIN, HOME_S_MIN, HOME_V_MIN, HOME_H_MAX, HOME_S_MAX, HOME_V_MAX );
+
+		if(loop_count%3 == 1){//should enter on first pass because increments from zero
+			trackObject(away_pos, HSV, AWAY_H_MIN, AWAY_S_MIN, AWAY_V_MIN, AWAY_H_MAX, AWAY_S_MAX, AWAY_V_MAX );
+			trackObject(away2_pos, HSV, AWAY2_H_MIN, AWAY2_S_MIN, AWAY2_V_MIN, AWAY2_H_MAX, AWAY2_S_MAX, AWAY2_V_MAX );
+		}
+
 		//trackObject(home2_pos, HSV, HOME_H_MIN, HOME_S_MIN, HOME_V_MIN, HOME_H_MAX, HOME_S_MAX, HOME_V_MAX );
 
 		drawObject(ball_pos.x, ball_pos.y, dst);
@@ -492,8 +508,14 @@ int main(int argc, char* argv[])
 		// array.data.push_back(convertToMeters(cartesian_x(home2_pos.x)));
 		// array.data.push_back(convertToMeters(cartesian_y(home2_pos.y)));
 		// array.data.push_back(home2_pos.theta);
+		array.data.push_back(convertToMeters(cartesian_x(away_pos.x)));
+		array.data.push_back(convertToMeters(cartesian_y(away_pos.y)));
+		array.data.push_back(away_pos.theta);
+		array.data.push_back(convertToMeters(cartesian_x(away2_pos.x)));
+		array.data.push_back(convertToMeters(cartesian_y(away2_pos.y)));
+		array.data.push_back(away2_pos.theta);
 
-		ROS_INFO("%f, %f, %f, %f, %f, %f, %f, %f", array.data[0], array.data[1], array.data[2], array.data[3], array.data[4], array.data[5], array.data[6], array.data[7]);
+		ROS_INFO("%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", array.data[0], array.data[1], array.data[2], array.data[3], array.data[4], array.data[5], array.data[6], array.data[7], array.data[8], array.data[9], array.data[10]);
 
 		chatter_pub.publish(array);
 
@@ -503,6 +525,12 @@ int main(int argc, char* argv[])
 
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
+
+		if(loop_count == 30){
+			printf("Time elapsed: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
+			loop_count = 0;
+		}
+
 		waitKey(5);
 	}
 
