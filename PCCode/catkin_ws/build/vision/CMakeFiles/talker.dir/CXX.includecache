@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/ecestudent/catkin_ws/src/vision/src/multipleObjectTracking.cpp
+/home/ecestudent/catkin_ws/src/Vision/src/multipleObjectTracking.cpp
 sstream
 -
 string
@@ -18,9 +18,11 @@ iostream
 /usr/include/opencv/cv.hpp
 -
 ros/ros.h
-/home/ecestudent/catkin_ws/src/vision/src/ros/ros.h
+/home/ecestudent/catkin_ws/src/Vision/src/ros/ros.h
 std_msgs/String.h
-/home/ecestudent/catkin_ws/src/vision/src/std_msgs/String.h
+/home/ecestudent/catkin_ws/src/Vision/src/std_msgs/String.h
+std_msgs/Float64MultiArray.h
+-
 
 /opt/ros/indigo/include/XmlRpcDecl.h
 ros/macros.h
@@ -663,6 +665,58 @@ ros/forwards.h
 /opt/ros/indigo/include/ros/ros/forwards.h
 
 /opt/ros/indigo/include/rosconsole/macros_generated.h
+
+/opt/ros/indigo/include/std_msgs/Float64MultiArray.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/MultiArrayLayout.h
+-
+
+/opt/ros/indigo/include/std_msgs/MultiArrayDimension.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/opt/ros/indigo/include/std_msgs/MultiArrayLayout.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/MultiArrayDimension.h
+-
 
 /opt/ros/indigo/include/std_msgs/String.h
 string

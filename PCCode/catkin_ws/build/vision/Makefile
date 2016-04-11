@@ -120,14 +120,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/ecestudent/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ecestudent/catkin_ws/build/CMakeFiles /home/ecestudent/catkin_ws/build/vision/CMakeFiles/progress.marks
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/all
+	cd /home/ecestudent/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ecestudent/catkin_ws/build/CMakeFiles /home/ecestudent/catkin_ws/build/Vision/CMakeFiles/progress.marks
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ecestudent/catkin_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/clean
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/clean
 .PHONY : clean
 
 # The main clean target
@@ -136,12 +136,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/preinstall
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/preinstall
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -150,143 +150,143 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+.PHONY : Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_cpp: vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+roscpp_generate_messages_cpp: Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
 .PHONY : roscpp_generate_messages_cpp
 
 # fast build rule for target.
 roscpp_generate_messages_cpp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make Vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build
 .PHONY : roscpp_generate_messages_cpp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+.PHONY : Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_lisp: vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+roscpp_generate_messages_lisp: Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
 .PHONY : roscpp_generate_messages_lisp
 
 # fast build rule for target.
 roscpp_generate_messages_lisp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make Vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build
 .PHONY : roscpp_generate_messages_lisp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
+Vision/CMakeFiles/roscpp_generate_messages_py.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
+.PHONY : Vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_py: vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
+roscpp_generate_messages_py: Vision/CMakeFiles/roscpp_generate_messages_py.dir/rule
 .PHONY : roscpp_generate_messages_py
 
 # fast build rule for target.
 roscpp_generate_messages_py/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/roscpp_generate_messages_py.dir/build.make vision/CMakeFiles/roscpp_generate_messages_py.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/roscpp_generate_messages_py.dir/build.make Vision/CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
 
 # Convenience name for target.
-vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+.PHONY : Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+rosgraph_msgs_generate_messages_cpp: Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
 .PHONY : rosgraph_msgs_generate_messages_cpp
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make Vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+.PHONY : Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+rosgraph_msgs_generate_messages_lisp: Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
 .PHONY : rosgraph_msgs_generate_messages_lisp
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make Vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+.PHONY : Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_py: vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+rosgraph_msgs_generate_messages_py: Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
 .PHONY : rosgraph_msgs_generate_messages_py
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_py/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make Vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+.PHONY : Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-std_msgs_generate_messages_cpp: vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+std_msgs_generate_messages_cpp: Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 .PHONY : std_msgs_generate_messages_cpp
 
 # fast build rule for target.
 std_msgs_generate_messages_cpp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make Vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
 .PHONY : std_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+.PHONY : Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-std_msgs_generate_messages_lisp: vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+std_msgs_generate_messages_lisp: Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 .PHONY : std_msgs_generate_messages_lisp
 
 # fast build rule for target.
 std_msgs_generate_messages_lisp/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make Vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 .PHONY : std_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+Vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+.PHONY : Vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-std_msgs_generate_messages_py: vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+std_msgs_generate_messages_py: Vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 .PHONY : std_msgs_generate_messages_py
 
 # fast build rule for target.
 std_msgs_generate_messages_py/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/std_msgs_generate_messages_py.dir/build.make vision/CMakeFiles/std_msgs_generate_messages_py.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/std_msgs_generate_messages_py.dir/build.make Vision/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-vision/CMakeFiles/talker.dir/rule:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 vision/CMakeFiles/talker.dir/rule
-.PHONY : vision/CMakeFiles/talker.dir/rule
+Vision/CMakeFiles/talker.dir/rule:
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Vision/CMakeFiles/talker.dir/rule
+.PHONY : Vision/CMakeFiles/talker.dir/rule
 
 # Convenience name for target.
-talker: vision/CMakeFiles/talker.dir/rule
+talker: Vision/CMakeFiles/talker.dir/rule
 .PHONY : talker
 
 # fast build rule for target.
 talker/fast:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/talker.dir/build.make vision/CMakeFiles/talker.dir/build
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/build
 .PHONY : talker/fast
 
 src/multipleObjectTracking.o: src/multipleObjectTracking.cpp.o
@@ -294,7 +294,7 @@ src/multipleObjectTracking.o: src/multipleObjectTracking.cpp.o
 
 # target to build an object file
 src/multipleObjectTracking.cpp.o:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/talker.dir/build.make vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.o
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.o
 .PHONY : src/multipleObjectTracking.cpp.o
 
 src/multipleObjectTracking.i: src/multipleObjectTracking.cpp.i
@@ -302,7 +302,7 @@ src/multipleObjectTracking.i: src/multipleObjectTracking.cpp.i
 
 # target to preprocess a source file
 src/multipleObjectTracking.cpp.i:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/talker.dir/build.make vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.i
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.i
 .PHONY : src/multipleObjectTracking.cpp.i
 
 src/multipleObjectTracking.s: src/multipleObjectTracking.cpp.s
@@ -310,7 +310,7 @@ src/multipleObjectTracking.s: src/multipleObjectTracking.cpp.s
 
 # target to generate assembly for a file
 src/multipleObjectTracking.cpp.s:
-	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f vision/CMakeFiles/talker.dir/build.make vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.s
+	cd /home/ecestudent/catkin_ws/build && $(MAKE) -f Vision/CMakeFiles/talker.dir/build.make Vision/CMakeFiles/talker.dir/src/multipleObjectTracking.cpp.s
 .PHONY : src/multipleObjectTracking.cpp.s
 
 # Help Target

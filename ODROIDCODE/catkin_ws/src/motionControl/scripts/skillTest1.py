@@ -29,13 +29,20 @@ class Statics:
 	oldAngle = 0;
 	oldX = 0;
 	oldY = 0;
+	inColidState = False;
 
 	# Data Received From Vision
-	robotX = float(0)
-	robotY = float(0)
-	theta = float(0)
-	ballX = float(0)
-	ballY = float(0)
+	robotX = 0.0
+	robotY = 0.0
+	theta = 0.0
+	ballX = 0.0
+	ballY = 0.0
+	enemy1X = 0.0
+	enemy1Y = 0.0
+	enemy1theta = 0.0
+	enemy2X = 0.0
+	enemy2Y = 0.0
+	enemy2theta = 0.0
 
 	# Helpful Variables
 	enemyGoalCenterX = 0
@@ -69,16 +76,54 @@ def callback(data):
 		Statics.samples = 0
 
 ######################################################################################################################################
-######################################################### Data Parser ################################################################
+######################################################### Helper Functions ###########################################################
 ######################################################################################################################################
 def parseData(data):
 
-	#break off to variables
-	Statics.robotX = (data[0]);
-	Statics.robotY = (data[1]);
-	Statics.theta = (data[2]);
-	Statics.ballX = (data[3])
-	Statics.ballY = (data[4])
+	#%%%%% break off to variables %%%%%%#
+	# Our Robot
+	Statics.robotX = data[0]
+	Statics.robotY = data[1]
+	Statics.theta = data[2]
+
+	# The Ball
+	Statics.ballX = data[3]
+	Statics.ballY = data[4]
+
+	# First Enemy Robot
+	Statics.enemy1X = data[5]
+	Statics.enemy1Y = data[6]
+	Statics.enemy1theta = data[7]
+
+	# Second Enemy Robot if it exists
+	Statics.enemy2X = data[8]
+	Statics.enemy2Y = data[9]
+	Statics.enemy2theta = data[10]
+
+def checkIfColidesWithEnemy(commandedX, commandedY):
+	# Calculate a position that is about 0.1m in front of us
+	deltaX = commandedX - Statics.robotX
+	deltaY = commandedY - Statics.robotY
+	pointX = Statics.robotX + ((0.04)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	pointY = Statics.robotY + ((0.04)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	
+	# Check if you colide with first enemy
+	collisionWithFirstEnemy = False;
+	if (abs(pointX - Statics.enemy1X) <= 0.024 or abs(pointY - Statics.enemy1Y) <= 0.024):
+		collisionWithFirstEnemy = True;
+
+	# Check if a second enemy exists, if yes, check for collision
+	collisionWithSecondEnemy = False;
+	secondRobotExists = True;
+	if (Statics.enemy2X == 0.0 and Statics.enemy2Y == 0.0 and Statics.enemy2theta == 0.0):
+		secondRobotExists = False;
+	if (secondRobotExists and abs(pointX - Statics.enemy2X) <= 0.024 or abs(pointY - Statics.enemy2Y) <= 0.024):
+		collisionWithSecondEnemy = True;
+
+	# If you are about to collide with a robot, stop immediately
+	if (collisionWithFirstEnemy or collisionWithSecondEnemy):
+		Statics.inColideState = True;
+		v.goVel(0, 0, 0)
 
 ######################################################################################################################################
 ######################################################## State Machine ###############################################################
@@ -103,6 +148,9 @@ def selectState():
 		# Calculate Error from desired positions
 		Statics.XErr = commanded_X_pos - Statics.robotX
 		Statics.YErr = commanded_Y_pos - Statics.robotY
+
+		# Check for collision
+		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
 
 		# If Error is small, then we are at the goal, transition to defend
 		if (abs(Statics.XErr) <= 0.2 and abs(Statics.YErr) <= 0.2):
@@ -177,6 +225,9 @@ def selectState():
 		Statics.XErr = commanded_X_pos - Statics.robotX
 		Statics.YErr = commanded_Y_pos - Statics.robotY
 
+		# Check for collision
+		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
+
 		Statics.xSamples = Statics.xSamples+1;
 		if (Statics.xSamples == 5):
 			Statics.xSamples = 0;
@@ -215,6 +266,9 @@ def selectState():
 		deltaY = Statics.enemyGoalCenterY - Statics.ballY
 		commanded_X_pos = Statics.ballX + ((-0.2)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
 		commanded_Y_pos = Statics.ballY + ((-0.2)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+
+		# Check for collision
+		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
 
 		# Check if the robot is currently behind the ball
 		if (Statics.sideOfField == "Home" and (Statics.ballX - Statics.robotX) >= 0.0):
@@ -372,7 +426,8 @@ def goToGoal():
 	vel_Y_Body_Frame = (math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 	
 	# Send commands to the wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
+	if (not Statics.inColideState):
+		v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug and Statics.samples == Statics.maxSamples):
@@ -421,7 +476,6 @@ def defendGoal():
 		print "current_Y_pos %f"%Statics.robotY
 		print "error in Y %f"%error_Y
 		print "vel Y %f"%vel_Y
-
 		print "vel x body frame %f"%vel_X_Body_Frame
 		print "vel y body frame %f"%vel_Y_Body_Frame
 
@@ -430,8 +484,6 @@ def attackEnemy():
 	# Code for Proportional Controller
 	if (abs(Statics.XErr) <= 0.5):
 		error_Max_X = 1.9
-		# if (abs(Statics.robotX - Statics.oldX) < 0.5):
-		# 	error_Max_X = 1.3
 	else:
 		error_Max_X = 2.3
 	vel_Max_X = 1.4
@@ -442,8 +494,6 @@ def attackEnemy():
 	# Code for Proportional Controller
 	if (abs(Statics.YErr) <= 0.5):
 		error_Max_Y = 1.9
-		# if (abs(Statics.robotY - Statics.oldY) < 0.5):
-		# 	error_Max_Y = 1.3
 	else:
 		error_Max_Y = 2.3
 	vel_Max_Y = 1.4
@@ -456,7 +506,8 @@ def attackEnemy():
 	vel_Y_Body_Frame = (math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 	
 	# Send Commands to Wheels
-	v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
+	if (not Statics.inColideState):
+		v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
 
 	# Print Data
 	if (Statics.debug and Statics.samples == Statics.maxSamples):
@@ -474,13 +525,8 @@ def attackEnemy():
 		
 def rushBall():
 	# Code for Proportional Controller
-	#print "In RushBall"
 	if (abs(Statics.XErr) <= 0.5):
-		print "gain 111111111111111111"
 		error_Max_X = 1.6
-		# if (abs(Statics.robotX - Statics.oldX) < 0.5):
-		# 	print "Gain 22222222222222222"
-		# 	error_Max_X = 1.3
 	else:
 		error_Max_X = 2.0
 	vel_Max_X = 1.4
@@ -491,8 +537,6 @@ def rushBall():
 	# Code for Proportional Controller
 	if (abs(Statics.YErr) <= 0.5):
 		error_Max_Y = 1.6
-		# if (abs(Statics.robotY - Statics.oldY) < 0.1):
-		# 	error_Max_Y = 1.3
 	else:
 		error_Max_Y = 2.0
 	vel_Max_Y = 1.4
@@ -504,29 +548,22 @@ def rushBall():
 	Statics.vel_X_Body_Frame = math.cos(Statics.theta)*vel_X + math.sin(Statics.theta)*vel_Y 
 	Statics.vel_Y_Body_Frame = (math.cos(Statics.theta)*float(vel_Y) - math.sin(Statics.theta)*float(vel_X))
 
-	#if we are close to ball and vel x and y are too small
-	#Rerror = math.sqrt(error_X*error_X + error_Y*error_Y)
-	# if(Rerror < .2):
-	# 	radius_Error_Min = .2
-	# 	Statics.vel_X_Body_Frame = kp_X * .2 * error_X/Rerror
-	# 	Statics.vel_Y_Body_Frame = kp_Y * .2 * error_Y/Rerror
-
 	# Send Commands to Wheels
-	v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, 0.0)
-	#print "After command"
+	if (not Statics.inColideState):
+		v.goVel(Statics.vel_X_Body_Frame, Statics.vel_Y_Body_Frame, 0.0)
+
 	# Print Data
 	if (Statics.printRushBall and Statics.samples == Statics.maxSamples):
 		print "error in X %f"%error_X
-		# print "current_X_pos %f"%Statics.robotX
-		# print "vel X %f"%vel_X
-		# print
+		print "current_X_pos %f"%Statics.robotX
+		print "vel X %f"%vel_X
+		print
 		print "error in Y %f"%error_Y
-		# print "current_Y_pos %f"%Statics.robotY
-		# print "vel Y %f"%vel_Y
-		# print
-
-		#print "vel x body frame %f"%Statics.vel_X_Body_Frame
-		#print "vel y body frame %f"%Statics.vel_Y_Body_Frame
+		print "current_Y_pos %f"%Statics.robotY
+		print "vel Y %f"%vel_Y
+		print
+		print "vel x body frame %f"%Statics.vel_X_Body_Frame
+		print "vel y body frame %f"%Statics.vel_Y_Body_Frame
 
 ######################################################################################################################################
 ######################################################### Main Code ##################################################################

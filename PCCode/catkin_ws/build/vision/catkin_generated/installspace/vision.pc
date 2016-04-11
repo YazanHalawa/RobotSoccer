@@ -1,7 +1,7 @@
 prefix=/home/ecestudent/catkin_ws/install
 
-Name: vision
-Description: Description of vision
+Name: Vision
+Description: Description of Vision
 Version: 0.0.0
 Cflags: 
 Libs: -L/home/ecestudent/catkin_ws/install/lib 

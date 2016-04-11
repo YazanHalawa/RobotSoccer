@@ -1,4 +1,4 @@
-# Install script for directory: /home/ecestudent/catkin_ws/src/vision
+# Install script for directory: /home/ecestudent/catkin_ws/src/Vision
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,17 +33,17 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ecestudent/catkin_ws/build/vision/catkin_generated/installspace/vision.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ecestudent/catkin_ws/build/Vision/catkin_generated/installspace/Vision.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vision/cmake" TYPE FILE FILES
-    "/home/ecestudent/catkin_ws/build/vision/catkin_generated/installspace/visionConfig.cmake"
-    "/home/ecestudent/catkin_ws/build/vision/catkin_generated/installspace/visionConfig-version.cmake"
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Vision/cmake" TYPE FILE FILES
+    "/home/ecestudent/catkin_ws/build/Vision/catkin_generated/installspace/VisionConfig.cmake"
+    "/home/ecestudent/catkin_ws/build/Vision/catkin_generated/installspace/VisionConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vision" TYPE FILE FILES "/home/ecestudent/catkin_ws/src/vision/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Vision" TYPE FILE FILES "/home/ecestudent/catkin_ws/src/Vision/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
