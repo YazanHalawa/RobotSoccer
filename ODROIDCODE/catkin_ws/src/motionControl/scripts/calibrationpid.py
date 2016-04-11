@@ -12,9 +12,9 @@ i = int(65536 * 2) #131072
 d = int(65536 * 6)  #65536
 q = 308419
 
-SetM2pidq(128,p,i,d,150000) # M2
-SetM1pidq(129,p,i,d,160000) # M1
-SetM2pidq(129,p,i,d,150000) # M3
+SetM2pidq(128,p,i,d,220997) # M2
+SetM1pidq(129,p,i,d,181505) # M1
+SetM2pidq(129,p,i,d,140571) # M3
 
 print readmainbattery()
 p1,i1,d1,q1 = readM1pidq(128)
@@ -72,7 +72,7 @@ sampleM3Forward = 0;
 sampleM3Backward = 0;
 
 
-speed = 30
+speed = 40
 
 stop();
 

@@ -78,10 +78,13 @@ def goVel(x,y,theta,time=1):
   s1 = radianToQpps(v1)
   s2 = radianToQpps(v2)
   s3 = radianToQpps(v3)
-  r1 = readM2speed(128)
+  #print "readS"
   r2 = readM1speed(129)
+  #print "Read r2"
   r3 = readM2speed(129)
-  print r1, r2, r3, s1, s2, s3;
+  #print "readr3"
+  r1 = readM2speed(128)
+  #print "Read r1"
   # if DEBUG:
   #   print r1
   #   print r2
@@ -90,9 +93,11 @@ def goVel(x,y,theta,time=1):
   SetM2SpeedAccel(128,int(abs(r1-s1)/time),s1)
   SetM1SpeedAccel(129,int(abs(r2-s2)/time),s2)
   SetM2SpeedAccel(129,int(abs(r3-s3)/time),s3)
+  #print "SetSpeeds"
   s1_prev=s1
   s2_prev=s2
   s3_prev=s3
+  #print "SetPrev"
 
 
 def myCircle():
@@ -234,9 +239,9 @@ if __name__ == '__main__':
   p = int(65536 * 4) #262144
   i = int(65536 * 2) #131072
   d = int(65536 * 6)  #65536
-  SetM2pidq(128,p,i,d,150000) # M2
-  SetM1pidq(129,p,i,d,160000) # M1
-  SetM2pidq(129,p,i,d,150000) # M3
+  SetM2pidq(128,p,i,d,161790) # M2
+  SetM1pidq(129,p,i,d,127351) # M1
+  SetM2pidq(129,p,i,d,117057) # M3
   myCircle()
   mySquare()
   #myRand()
@@ -297,8 +302,8 @@ if __name__ == '__main__':
 #time.sleep(1)
 
 #while True:
-#	time.sleep(1)
-#	print "M1"
-#	print readM1speed(128)
-#	print "M2"
-#	print readM2speed(128)
+# time.sleep(1)
+# print "M1"
+# print readM1speed(128)
+# print "M2"
+# print readM2speed(128)

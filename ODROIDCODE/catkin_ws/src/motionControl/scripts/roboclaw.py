@@ -17,8 +17,10 @@ oldValsWord = 0;
 def sendcommand(address,command):
 	global checksum
 	checksum = address
+	#print "Address"
 	port.write(chr(address));
 	checksum += command
+	#print "Command"
 	port.write(chr(command));
 	return;
 
@@ -233,9 +235,13 @@ def readM2encoder(addr):
 
 def readM1speed(addr):
 	sendcommand(addr,18);
+	#print "commandSent"
 	enc = readslong();
+	#print enc
 	status = readbyte();
+	#print status
 	crc = checksum&0x7F
+	#print crc
 	if crc==readbyte()&0x7F:
 		return enc
 	return -1;
@@ -245,9 +251,9 @@ def readM2speed(addr):
 	enc = readslong();
 	status = readbyte();
 	crc = checksum&0x7F
-	if crc==readbyte()&0x7F:
-		return enc
-	return -1;
+#	if crc==readbyte()&0x7F:
+	return enc
+#	return -1;
  
 def ResetEncoderCnts(addr):
 	sendcommand(addr,20)
