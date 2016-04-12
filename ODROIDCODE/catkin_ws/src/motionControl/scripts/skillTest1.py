@@ -23,13 +23,13 @@ class Statics:
 	xSamples = 0;
 	ySamples = 0;
 	suspendDefense = 0;
-	showTransitions = 1;
+	showTransitions = 0;
 	showDataReceived = 0;
 	maxSamples = 30
 	oldAngle = 0;
 	oldX = 0;
 	oldY = 0;
-	inColidState = False;
+	inColideState = False;
 
 	# Data Received From Vision
 	robotX = 0.0
@@ -37,8 +37,8 @@ class Statics:
 	theta = 0.0
 	ballX = 0.0
 	ballY = 0.0
-	enemy1X = 0.0
-	enemy1Y = 0.0
+	enemy1X = 0.01
+	enemy1Y = 0.01
 	enemy1theta = 0.0
 	enemy2X = 0.0
 	enemy2Y = 0.0
@@ -90,40 +90,42 @@ def parseData(data):
 	Statics.ballX = data[3]
 	Statics.ballY = data[4]
 
-	# First Enemy Robot
-	Statics.enemy1X = data[5]
-	Statics.enemy1Y = data[6]
-	Statics.enemy1theta = data[7]
+	# # First Enemy Robot
+	# Statics.enemy1X = data[5]
+	# Statics.enemy1Y = data[6]
+	# Statics.enemy1theta = data[7]
 
-	# Second Enemy Robot if it exists
-	Statics.enemy2X = data[8]
-	Statics.enemy2Y = data[9]
-	Statics.enemy2theta = data[10]
+	# # Second Enemy Robot if it exists
+	# Statics.enemy2X = data[8]
+	# Statics.enemy2Y = data[9]
+	# Statics.enemy2theta = data[10]
 
 def checkIfColidesWithEnemy(commandedX, commandedY):
 	# Calculate a position that is about 0.1m in front of us
 	deltaX = commandedX - Statics.robotX
 	deltaY = commandedY - Statics.robotY
-	pointX = Statics.robotX + ((0.04)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
-	pointY = Statics.robotY + ((0.04)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	pointX = Statics.robotX + ((0.1)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	pointY = Statics.robotY + ((0.1)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
 	
+	#print "pointX is %f and pointY is %f" %(pointX, pointY)
+
 	# Check if you colide with first enemy
 	collisionWithFirstEnemy = False;
-	if (abs(pointX - Statics.enemy1X) <= 0.024 or abs(pointY - Statics.enemy1Y) <= 0.024):
+	if (abs(pointX - Statics.enemy1X) <= 0.204 and abs(pointY - Statics.enemy1Y) <= 0.204):
 		collisionWithFirstEnemy = True;
 
+	#print "DifferenceX is %f, Difference Y is %f"%(abs(pointX - Statics.enemy1X), abs(pointY - Statics.enemy1Y))
 	# Check if a second enemy exists, if yes, check for collision
 	collisionWithSecondEnemy = False;
 	secondRobotExists = True;
 	if (Statics.enemy2X == 0.0 and Statics.enemy2Y == 0.0 and Statics.enemy2theta == 0.0):
 		secondRobotExists = False;
-	if (secondRobotExists and abs(pointX - Statics.enemy2X) <= 0.024 or abs(pointY - Statics.enemy2Y) <= 0.024):
+	if (secondRobotExists and abs(pointX - Statics.enemy2X) <= 0.204 and abs(pointY - Statics.enemy2Y) <= 0.204):
 		collisionWithSecondEnemy = True;
 
 	# If you are about to collide with a robot, stop immediately
-	if (collisionWithFirstEnemy or collisionWithSecondEnemy):
-		Statics.inColideState = True;
-		v.goVel(0, 0, 0)
+	return (collisionWithFirstEnemy or collisionWithSecondEnemy)
+
 
 ######################################################################################################################################
 ######################################################## State Machine ###############################################################
@@ -150,7 +152,12 @@ def selectState():
 		Statics.YErr = commanded_Y_pos - Statics.robotY
 
 		# Check for collision
-		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
+		if (checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)):
+			# if first enemy robot is to the right of the point, move left to avoid it
+			if (Statics.enemy1Y > commanded_Y_pos or (Statics.enemy2Y != 0.0 and Statics.enemy2Y > commanded_Y_pos)):
+				commanded_Y_pos = commanded_Y_pos - 0.5
+			else:
+				commanded_Y_pos = commanded_Y_pos + 0.5
 
 		# If Error is small, then we are at the goal, transition to defend
 		if (abs(Statics.XErr) <= 0.2 and abs(Statics.YErr) <= 0.2):
@@ -226,7 +233,12 @@ def selectState():
 		Statics.YErr = commanded_Y_pos - Statics.robotY
 
 		# Check for collision
-		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
+		if (checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)):
+			# if first enemy robot is to the right of the point, move left to avoid it
+			if (Statics.enemy1Y > commanded_Y_pos or (Statics.enemy2Y != 0.0 and Statics.enemy2Y > commanded_Y_pos)):
+				commanded_Y_pos = commanded_Y_pos - 0.5
+			else:
+				commanded_Y_pos = commanded_Y_pos + 0.5
 
 		Statics.xSamples = Statics.xSamples+1;
 		if (Statics.xSamples == 5):
@@ -268,7 +280,13 @@ def selectState():
 		commanded_Y_pos = Statics.ballY + ((-0.2)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
 
 		# Check for collision
-		checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)
+		if (checkIfColidesWithEnemy(commanded_X_pos, commanded_Y_pos)):
+			# if first enemy robot is to the right of the point, move left to avoid it
+			if (Statics.enemy1Y > commanded_Y_pos or (Statics.enemy2Y != 0.0 and Statics.enemy2Y > commanded_Y_pos)):
+				commanded_Y_pos = commanded_Y_pos - 0.5
+			else:
+				commanded_Y_pos = commanded_Y_pos + 0.5
+
 
 		# Check if the robot is currently behind the ball
 		if (Statics.sideOfField == "Home" and (Statics.ballX - Statics.robotX) >= 0.0):
