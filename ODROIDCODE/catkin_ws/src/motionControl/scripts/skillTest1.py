@@ -104,8 +104,8 @@ def checkIfColidesWithEnemy(commandedX, commandedY):
 	# Calculate a position that is about 0.1m in front of us
 	deltaX = commandedX - Statics.robotX
 	deltaY = commandedY - Statics.robotY
-	pointX = Statics.robotX + ((0.1)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
-	pointY = Statics.robotY + ((0.1)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	pointX = Statics.robotX + ((0.15)*deltaX/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
+	pointY = Statics.robotY + ((0.15)*deltaY/math.sqrt(deltaX*deltaX + deltaY*deltaY)) 
 	
 	#print "pointX is %f and pointY is %f" %(pointX, pointY)
 

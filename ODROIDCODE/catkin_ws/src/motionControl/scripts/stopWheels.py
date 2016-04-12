@@ -49,9 +49,9 @@ class stopper:
 	def correctAngle(self):
 		# Define where the enemy goal lies
 		if (self.sideOfField == "Away"):
-			enemyGoalCenterX = 1.4
+			enemyGoalCenterX = -1.4
 		else:
-			enemyGoalCenterX = -1.29
+			enemyGoalCenterX = 1.29
 		enemyGoalCenterY = 0
 		deltaX = enemyGoalCenterX - self.robotX
 		deltaY = enemyGoalCenterY - self.robotY
@@ -85,9 +85,9 @@ class stopper:
 
 	def goBackToBeginning(self):
 		if (self.sideOfField == "Away"):
-			commandedX = -0.535
-		else:
 			commandedX = 0.535
+		else:
+			commandedX = -0.535
 		commandedY = 0.0
 		XErr = commandedX - self.robotX
 		YErr = commandedY - self.robotY
@@ -108,7 +108,7 @@ class stopper:
 
 		# Account for the angle of the robot
 		vel_X_Body_Frame = math.cos(self.theta)*vel_X + math.sin(self.theta)*vel_Y 
-		vel_Y_Body_Frame = -1.0*(math.cos(self.theta)*float(vel_Y) - math.sin(self.theta)*float(vel_X))
+		vel_Y_Body_Frame = (math.cos(self.theta)*float(vel_Y) - math.sin(self.theta)*float(vel_X))
 		
 		# Send commands to the wheels
 		v.goVel(vel_X_Body_Frame, vel_Y_Body_Frame, 0.0)
@@ -133,9 +133,9 @@ if __name__ == '__main__':
 	p = int(65536 * 4) #262144
 	i = int(65536 * 2) #131072
 	d = int(65536 * 6)  #65536
-	SetM2pidq(128,p,i,d,161790) # M2
-	SetM1pidq(129,p,i,d,127351) # M1
-	SetM2pidq(129,p,i,d,117057) # M3
+	SetM2pidq(128,p,i,d,220997) # M2
+	SetM1pidq(129,p,i,d,181505) # M1
+	SetM2pidq(129,p,i,d,140571) # M3
 
 	# SetM2pidq(128,65536,32768,16384,243759)
 	# SetM2pidq(129,65536,32768,16384,264568)
