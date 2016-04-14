@@ -242,9 +242,9 @@ def readM1speed(addr):
 	#print status
 	crc = checksum&0x7F
 	#print crc
-	if crc==readbyte()&0x7F:
-		return enc
-	return -1;
+	#if crc==readbyte()&0x7F:
+	return enc
+	#return -1;
 
 def readM2speed(addr):
 	sendcommand(addr,19);

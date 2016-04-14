@@ -28,8 +28,8 @@ using namespace std;
 
 //initial min and max HSV filter values.
 //these will be changed using trackbars
-int Center_X = 448;
-int Center_Y = 260;
+int Center_X = 442;
+int Center_Y = 237;
 
 int BALL_H_MIN = 169;
 int BALL_H_MAX = 175;
@@ -395,7 +395,7 @@ void trackObject(Positions &p, Mat threshold, int Hmin, int Smin, int Vmin, int 
 				p.y = moments((cv::Mat)contours[index_largest]).m01/area;
 			}
 
-		}//imshow(p.w_name,threshold);
+		}imshow(p.w_name,threshold);
 	}
 }
 
@@ -403,7 +403,65 @@ int main(int argc, char* argv[])
 {
 	//if we would like to calibrate our filter values, set to true.
 	bool calibrationMode = true;
-	
+	string first (argv[1]);
+	string second (argv[2]);	
+	// grab command line argument to specify which side of the field we are playing
+	if (first == "Home"){
+		// Calibrate Us -> Blue
+		HOME_H_MIN = 43;
+		HOME_H_MAX = 156;
+		HOME_S_MIN = 67;
+		HOME_S_MAX = 208;
+		HOME_V_MIN = 224;
+		HOME_V_MAX = 256;
+
+		// Calibrate First Enemy Robot -> Green Default stays the same
+		AWAY_H_MIN = 70;
+		AWAY_H_MAX = 80;
+		AWAY_S_MIN = 40;
+		AWAY_S_MAX = 140;
+		AWAY_V_MIN = 1;
+		AWAY_V_MAX = 256;
+
+		// If a Second Enemy Robot Exists, Calibrate that as well -> Orange
+		if (second == "second"){
+			AWAY2_H_MIN = 0;
+			AWAY2_H_MAX = 17;
+			AWAY2_S_MIN = 95;
+			AWAY2_S_MAX = 143;
+			AWAY2_V_MIN = 179;
+			AWAY2_V_MAX = 256;
+		}
+
+
+	} else {
+		// Use Default Green Calibration Values for our robot -> Green
+		HOME_H_MIN = 70;
+		HOME_H_MAX = 80;
+		HOME_S_MIN = 40;
+		HOME_S_MAX = 140;
+		HOME_V_MIN = 1;
+		HOME_V_MAX = 256;
+
+		// Calibrate First Enemy Robot -> Blue
+		AWAY_H_MIN = 49;
+		AWAY_H_MAX = 122;
+		AWAY_S_MIN = 115;
+		AWAY_S_MAX = 275;
+		AWAY_V_MIN = 232;
+		AWAY_V_MAX = 256;
+		// If a Second Enemy Robot Exists, Calibrate that as well -> Purple
+		if (second == "second"){
+			AWAY2_H_MIN = 122;
+			AWAY2_H_MAX = 150;
+			AWAY2_S_MIN = 43;
+			AWAY2_S_MAX = 96;
+			AWAY2_V_MIN = 88;
+			AWAY2_V_MAX = 179;
+		}
+	}
+
+
 	//Matrix to store each frame of the webcam feed
 	Mat cameraFeed;
 	Mat dst; 
@@ -415,7 +473,7 @@ int main(int argc, char* argv[])
 	}
 
 	VideoCapture capture;
-	capture.open("http://192.168.1.78:8080/stream?topic=/image&dummy=param.mjpg");
+	capture.open("http://192.168.1.79:8080/stream?topic=/image&dummy=param.mjpg");
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
 
