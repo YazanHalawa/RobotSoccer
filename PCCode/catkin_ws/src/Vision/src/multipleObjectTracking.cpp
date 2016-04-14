@@ -541,13 +541,6 @@ int main(int argc, char* argv[])
 		home_pos.y = home_pos.old_y;
 		home_pos.theta = home_pos.old_theta;
 
-		// home2_pos.old_x = alpha_H_x*home2_pos.x + (1-alpha_H_x)*home2_pos.old_x;
-		// home2_pos.old_y = alpha_H_y*home2_pos.y + (1-alpha_H_y)*home2_pos.old_y;
-		// home2_pos.old_theta = alpha_H_ang*home2_pos.theta + (1-alpha_H_ang)*home2_pos.old_theta;
-		// home2_pos.x = home2_pos.old_x;
-		// home2_pos.y = home2_pos.old_y;
-		// home2_pos.theta = home2_pos.old_theta;
-
 		ball_pos.old_x = alpha_B_x*ball_pos.x + (1-alpha_B_x)*ball_pos.old_x;
 		ball_pos.old_y = alpha_B_y*ball_pos.y + (1-alpha_B_y)*ball_pos.old_y;
 		ball_pos.x = ball_pos.old_x;
